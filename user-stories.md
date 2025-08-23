@@ -104,7 +104,7 @@ View the patient details for upcoming appointments so that I can be prepared<br>
 **Notes:**<br>
    <br>
    <br>
-**Patient Stories**<br>
+##**Patient Stories**<br>
 **View list of doctors**<br>
 As a PatientI want to be able to view a list of doctors without logging in to explore options before registering<br>
 **Acceptance Criteria**:<br>
