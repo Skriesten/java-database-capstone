@@ -16,7 +16,7 @@
              <td>Long</td>
              <td>YES</td>
              <td></td>
-             <td>NOT NULL</td>
+             <td>NOT NULL, AUTO-GENERATE</td>
     </tr>
     <tr>
             <td>name</td>
@@ -98,7 +98,7 @@
          <td>Long</td>
          <td>YES</td>
          <td></td>
-         <td>NOT NULL</td>
+         <td>NOT NULL, AUTO-GENERATE</td>
 </tr>
 <tr>
         <td>name</td>
@@ -207,7 +207,7 @@
          <td>Long</td>
          <td>YES</td>
          <td></td>
-         <td>NOT NULL</td>
+         <td>NOT NULL, AUTO-GENERATE</td>
 </tr>
 <tr>
         <td>patient_id</td>
@@ -268,7 +268,7 @@
          <td>Long</td>
          <td>YES</td>
          <td></td>
-         <td>NOT NULL</td>
+         <td>NOT NULL, AUTO-GENERATE</td>
 </tr>
 <tr>
         <td>name</td>
@@ -350,7 +350,7 @@
              <td>Long</td>
              <td>YES</td>
              <td></td>
-             <td>NOT NULL</td>
+             <td>NOT NULL, AUTO-GENERATE</td>
     </tr>
     <tr>
             <td>patient_id</td>
@@ -397,7 +397,7 @@
          <td>Long</td>
          <td>YES</td>
          <td></td>
-         <td>NOT NULL</td>
+         <td>NOT NULL, AUTO-GENERATE</td>
 </tr>
 <tr>
         <td>field_of_practice</td>
