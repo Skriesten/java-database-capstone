@@ -1,7 +1,104 @@
 package com.project.back_end.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
+import java.util.List;
+
+@Entity
 public class Doctor {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Size(min = 3, max = 100)
+    @NotNull(message = "Doctor's name must be entered.")
+    private String name;
+
+        @NotNull
+        @Size(min = 3, max = 50)
+        private String specialty;
+
+    @NotNull
+    @Email
+    private String email;
+
+    @NotNull
+    @Size(min = 6)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+
+    @NotNull
+    @Pattern(regexp= "^[0-9]{10}$")
+    private String phone;
+
+    @ElementCollection
+    private List<String> availableTimes;
+
+    //  *********  GETTERS AND SETTERS  ********************
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<String> getAvailableTimes() {
+        return availableTimes;
+    }
+
+    public void setAvailableTimes(List<String> availableTimes) {
+        this.availableTimes = availableTimes;
+    }
+}        //  ===========  END OF CLASS =========================
+
+// ************* INSTRUCTIONS *************************
 // @Entity annotation:
 //    - Marks the class as a JPA entity, meaning it represents a table in the database.
 //    - Required for persistence frameworks (e.g., Hibernate) to map the class to a database table.
@@ -18,9 +115,8 @@ public class Doctor {
 //    - Description:
 //      - Represents the doctor's name.
 //      - The @NotNull annotation ensures that the doctor's name is required.
-//      - The @Size(min = 3, max = 100) annotation ensures that the name length is between 3 and 100 characters. 
+//      - The @Size(min = 3, max = 100) annotation ensures that the name length is between 3 and 100 characters.
 //      - Provides validation for correct input and user experience.
-
 
 // 3. 'specialty' field:
 //    - Type: private String
@@ -60,6 +156,3 @@ public class Doctor {
 
 // 8. Getters and Setters:
 //    - Standard getter and setter methods are provided for all fields: id, name, specialty, email, password, phone, and availableTimes.
-
-}
-

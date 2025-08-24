@@ -1,8 +1,109 @@
 package com.project.back_end.models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+import org.apache.catalina.User;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+@Entity
 public class Appointment {
 
-  // @Entity annotation:
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+
+        @ManyToOne
+        @NotNull
+        private  Doctor doctor;
+
+        @ManyToOne
+        @NotNull
+        private  Patient patient;
+
+        @Future(message = "Appointment date and time must be in the future.")
+        @NotNull
+        private LocalDateTime appointmentTime;
+
+        @NotNull
+        private int status;
+
+        @Transient
+        public void getEndTime(){
+        appointmentTime = LocalDateTime.now();
+        }
+
+        @Transient
+        public  void getAppointmentDate(){
+        LocalDate extractedDate = appointmentTime.toLocalDate();
+        //appointmentTime = LocalDateTime.now();
+        }
+
+        @Transient
+        public   void getAppointmentTimeOnly(){
+        LocalTime extractedTime = appointmentTime.toLocalTime();
+        appointmentTime = LocalDateTime.now();
+        }
+
+    // Parameterized constructor
+    public Appointment(Long id, Doctor doctor, Patient patient, LocalDateTime appointmentTime, int status) {
+        this.id = id;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.appointmentTime = appointmentTime;
+        this.status = status;
+    }
+
+    // No Args Constructor
+    public Appointment() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public LocalDateTime getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(LocalDateTime appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+} // *********** END OF CLASS *******************************
+
+// ************** INSTRUCTIONS ***************************
+// @Entity annotation:
 //    - Marks the class as a JPA entity, meaning it represents a table in the database.
 //    - Required for persistence frameworks (e.g., Hibernate) to map the class to a database table.
 
@@ -67,6 +168,3 @@ public class Appointment {
 
 // 10. Getters and Setters:
 //    - Standard getter and setter methods are provided for accessing and modifying the fields: id, doctor, patient, appointmentTime, status, etc.
-
-}
-
