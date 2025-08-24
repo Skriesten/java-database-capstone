@@ -6,3 +6,45 @@
 • Provide a realistic JSON example of a document with nested fields or arrays.
 • Justify your design decisions using inline comments if needed.
 • Commit and push your file to GitHub.
+
+{
+  "product_id": "A123",
+  "name": "Wireless Mouse",
+  "category": "Electronics",
+  "price": 29.99,
+  "stock": 100,
+  "specs": {
+    "brand": "Logitech",
+    "connectivity": "Bluetooth",
+    "battery_life": "12 months"
+  }
+}
+
+Patient information
+Patient name: The full name of the individual for whom the medication is prescribed.
+Date of birth (DOB): The patient's birth date, used for identification and dosage calculations.
+Address: The patient's physical address.
+Medical Record Number (MRN): A unique identifier assigned to the patient by the healthcare system.
+Allergies: Any known patient allergies, especially to medications.
+Prescriber information
+Doctor/Prescriber: The name of the licensed medical provider writing the prescription.
+License number: The prescriber's professional license number.
+DEA number: The prescriber's Drug Enforcement Administration number, required for controlled substances.
+Signature: The prescriber's signature, often digital for e-prescriptions.
+Medication details
+Rx Number: A unique number assigned to each prescription by the pharmacy for tracking.
+Drug Name: The generic or brand name of the medication.
+Drug Type: A classification of the medication (e.g., antibiotic, antidepressant).
+Strength: The amount of active ingredient per dose (e.g., 250 mg).
+Form: The physical form of the medication (e.g., tablet, capsule, liquid).
+Dispense Amount: The quantity of medication to be dispensed (e.g., 30 tablets).
+Refills: The number of refills authorized by the prescriber.
+Route: The method of administration (e.g., oral, topical, injection).
+Instructions (SIG): Directions for the patient, including the dosage, frequency, and timing (e.g., "Take one tablet by mouth once daily").
+Reason (Indication): The medical condition being treated, though this may not always appear on the patient's label.
+Start/End Dates: When the medication should begin and, if applicable, be discontinued.
+Expiration Date: The date the prescription expires and can no longer be filled.
+Comments/Notes: Additional information for the pharmacist or patient.
+Pharmacy information
+Pharmacy Name: The name of the pharmacy that fills the prescription.
+Pharmacy Phone #: The phone number for the pharmacy.
