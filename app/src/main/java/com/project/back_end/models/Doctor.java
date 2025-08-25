@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class Doctor {
     private String password;
 
     @NotNull(message = "Phone number must be provided")
-    @Pattern(regexp= "^[0-9]{10}$")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")// Alternate @Pattern(regexp = "\\d{10}")
     private String phone;
 
     @NotNull(message = "Date hired must be provided.")
@@ -54,14 +55,13 @@ public class Doctor {
     private String clinic_address;
 
     @ElementCollection
-    private List<String> availableTimes;
+    private List<String> availableTimes;  //List of available time slots (Example: "09:00 -10:00")
 
     @OneToMany(mappedBy = "doctor")
     private Collection<Appointment> appointment;
 
     @OneToMany(mappedBy = "doctor")
     private Collection<Patient_Record>  patientRecords;
-
 
     //  *********  GETTERS AND SETTERS  ********************
 
@@ -184,7 +184,6 @@ public class Doctor {
     public void setPatientRecords(Collection<Patient_Record> patientRecords) {
         this.patientRecords = patientRecords;
     }
-
 
 }        //  ===========  END OF CLASS =========================
 

@@ -2,9 +2,7 @@ package com.project.back_end.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
-import org.apache.catalina.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,8 +25,6 @@ public class Appointment {
         @JsonManagedReference
         private  Patient patient;
 
-        @Future(message = "Appointment date and time must be in the future.")
-        @NotNull(message = "Appointment date/time is required")
         private LocalDateTime appointmentTime;
 
         @NotNull(message = "Status is required")
@@ -39,21 +35,22 @@ public class Appointment {
 
         // *** METHODS **********************************8
         @Transient
-        public LocalDateTime getEndTime(){
-                    appointmentTime = LocalDateTime.now();
-                    return appointmentTime;
+        public LocalDateTime getEndTime(LocalDateTime appointmentTime) {
+                // End Time is estimated to be one hour after initial time
+                    java.time.LocalDateTime endTime =  appointmentTime.plusHours(1);
+                    return endTime;
         }
 
         @Transient
-        public  LocalDateTime getAppointmentDate(){
-        appointmentTime = LocalDateTime.now();
-            return appointmentTime;
+        public LocalDate getAppointmentDate(LocalDateTime appointmentTime) {
+        LocalDate apptDate = appointmentTime.toLocalDate();
+            return apptDate;
         }
 
         @Transient
-        public   LocalDateTime getAppointmentTimeOnly(){
-            appointmentTime = LocalDateTime.now();
-            return appointmentTime;
+        public LocalTime getAppointmentTimeOnly(LocalDateTime appointmentTime) {
+            LocalTime apptTime = appointmentTime.toLocalTime();
+            return apptTime;
         }
 
     // Parameterized constructor

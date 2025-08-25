@@ -31,7 +31,7 @@ public class Patient {
     private String password;
 
     @NotNull(message = "Phone number must be provided.  Supply only numbers, no dashes or parenthesis")
-    @Pattern(regexp = "^[0-9]{10}$")
+    @Pattern(regexp = "^[0-9]{10}$") // Alternate @Pattern(regexp = "\\d{10}")
     private String phone;
 
     @NotNull(message = "Address must be provided")
