@@ -1,17 +1,19 @@
 package com.project.back_end.models;
 
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Entity
 public class Prescription {
     @Id
     private String id;
 
+    @ManyToOne
     @NotNull
     @Size(min = 3, max = 100)
     private Patient patient;
