@@ -2,6 +2,7 @@ package com.project.back_end.models;
 
 
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,7 +14,11 @@ public class Prescription {
 
     @NotNull
     @Size(min = 3, max = 100)
-    private String patientName;
+    private Patient patient;
+
+    @NotNull
+    @ManyToOne
+    private Doctor doctor;
 
     @NotNull
     private Long appointmentId;
@@ -33,13 +38,17 @@ public class Prescription {
     }
 
     // ********** CONSTRUCTOR  ************************
-    public Prescription(String patientName, Long appointmentId, String medication, String dosage, String doctorNotes) {
-        this.patientName = patientName;
+
+    public Prescription(String id, Patient patient, Doctor doctor, Long appointmentId, String medication, String dosage, String doctorNotes) {
+        this.id = id;
+        this.patient = patient;
+        this.doctor = doctor;
         this.appointmentId = appointmentId;
         this.medication = medication;
         this.dosage = dosage;
         this.doctorNotes = doctorNotes;
     }
+
 
 // *** GETTERS AND SETTERS  ***************************
 
@@ -51,12 +60,20 @@ public class Prescription {
         this.id = id;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
     public Long getAppointmentId() {

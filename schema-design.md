@@ -37,14 +37,21 @@
              <td>String</td>
              <td></td>
              <td></td>
-             <td>NOT NULL</td>
+             <td>NOT NULL, hide in API response @JsonIgnore</td>
     </tr>
     <tr>
             <td>email</td>
              <td>String</td>
              <td></td>
              <td></td>
-             <td>NOT NULL, UNIQUE</td>
+             <td>NOT NULL, UNIQUE, @Email</td>
+    </tr>
+ <tr>
+            <td>phone</td>
+             <td>String</td>
+             <td></td>
+             <td></td>
+             <td>NOT NULL</td>
     </tr>
     <tr>
             <td>role</td>
@@ -54,11 +61,11 @@
              <td>NOT NULL</td>
     </tr>
     <tr>
-            <td>dob</td>
+            <td>date_of_birth</td>
              <td>Date</td>
              <td></td>
              <td></td>
-             <td>NOT NULL</td>
+             <td>NOT NULL, date <= today</td>
     </tr>
     <tr>
             <td>date_registered</td>
@@ -68,7 +75,7 @@
              <td>NOT NULL</td>
     </tr>
     <tr>
-            <td>sex</td>
+            <td>gender</td>
              <td>String</td>
              <td></td>
              <td></td>
@@ -81,6 +88,20 @@
                  <td></td>
                  <td></td>
     </tr>
+<tr>
+        <td>emergency_contact</td>
+         <td>String</td>
+         <td></td>
+         <td></td>
+         <td>NOT NULL, size <= 200</td>
+</tr>
+<tr>
+        <td>active_yn</td>
+         <td>Boolean</td>
+         <td></td>
+         <td></td>
+         <td>NOT NULL, True = YES/False = NO</td>
+</tr>
 </table>
         
 
@@ -119,7 +140,7 @@
          <td>String</td>
          <td></td>
          <td></td>
-         <td>NOT NULL</td>
+         <td>NOT NULL, hide in API response @JsonIgnore)</td>
 </tr>
 <tr>
         <td>role</td>
@@ -133,37 +154,24 @@
          <td>String</td>
          <td></td>
          <td></td>
-         <td>NOT NULL, UNIQUE</td>
+         <td>NOT NULL, UNIQUE, @Email</td>
 </tr>
 <tr>
-        <td>dob</td>
-         <td>Date</td>
+        <td>phone</td>
+         <td>String</td>
          <td></td>
          <td></td>
          <td>NOT NULL</td>
 </tr>
 <tr>
-        <td>date_registered</td>
+        <td>date_hired</td>
          <td>Date</td>
          <td></td>
          <td></td>
-         <td>NOT NULL</td>
+         <td>NOT NULL, date_hired <= today</td>
 </tr>
 <tr>
-        <td>sex</td>
-         <td>String</td>
-         <td></td>
-         <td></td>
-         <td>MALE/FEMALE</td>
-</tr>
-<tr>
-        <td>address</td>
-         <td>String</td>
-         <td></td>
-         <td></td>
-         <td></td>
-<tr>
-        <td>field_of_practice_id</td>
+        <td>specialty</td>
          <td>Long</td>
          <td></td>
          <td>YES</td>
@@ -171,7 +179,7 @@
 </tr>
 <tr>
         <td>active_yn</td>
-         <td>Binary</td>
+         <td>Boolean</td>
          <td></td>
          <td></td>
          <td>NOT NULL</td>
@@ -190,6 +198,13 @@
          <td></td>
          <td>NOT NULL</td>
 </tr>
+<tr>
+        <td>clinic_address</td>
+         <td>String</td>
+         <td></td>
+         <td></td>
+         <td>NOT NULL, size <= 200</td>
+</tr>
 </table>
 
 
@@ -200,7 +215,7 @@
         <th>Data type</th>
         <th>Primary key</th>
         <th>Foreign key</th>
-        <th>Constraints</th><
+        <th>Constraints</th>
 </tr>
 <tr>
         <td>id</td>
@@ -306,36 +321,15 @@
          <td>NOT NULL, UNIQUE</td>
 </tr>
 <tr>
-        <td>dob</td>
+        <td>date_hired</td>
          <td>Date</td>
          <td></td>
          <td></td>
-         <td>NOT NULL</td>
-</tr>
-<tr>
-        <td>date_registered</td>
-         <td>Date</td>
-         <td></td>
-         <td></td>
-         <td>NOT NULL</td>
-</tr>
-<tr>
-        <td>sex</td>
-         <td>String</td>
-         <td></td>
-         <td></td>
-         <td>MALE/FEMALE</td>
-</tr>
-<tr>
-        <td>address</td>
-         <td>String</td>
-         <td></td>
-         <td></td>
-         <td></td>
+         <td>NOT NULL, date_hired <= today</td>
 </tr>
 </table>
 
-### Medical_chart
+### Patient_Record
 //  This is a detail table to record each visit to the doctor.  //
 <table>
     <tr>
@@ -367,45 +361,19 @@
              <td>NOT NULL</td>
     </tr>
     <tr>
-            <td>appt_id</td>
-             <td>Long</td>
+            <td>date_of_visit</td>
+             <td>Date</td>
              <td></td>
-             <td>YES</td>
-             <td>NOT NULL</td>
+             <td>/td>
+             <td>NOT NULL, default = now</td>
     </tr>
     <tr>
             <td>visit_summary</td>
              <td>String</td>
              <td></td>
              <td></td>
-             <td>NOT NULL</td>
+             <td>NOT NULL, min >= 3 & max <= 1000</td>
     </tr>
-</table>
-
-### Field_of_practice
- //  Field of practice is a lookup field for the doctor details. //
-<table>
-<tr>
-        <th> Column name</th>
-        <th>Data type</th>
-        <th>Primary key</th>
-        <th>Foreign key</th>
-        <th>Constraints</th>
-</tr>
-<tr>
-        <td>id</td>
-         <td>Long</td>
-         <td>YES</td>
-         <td></td>
-         <td>NOT NULL, AUTO-GENERATE</td>
-</tr>
-<tr>
-        <td>field_of_practice</td>
-         <td>String</td>
-         <td></td>
-         <td></td>
-         <td>NOT NULL</td>
-</tr>
 </table>
 
 

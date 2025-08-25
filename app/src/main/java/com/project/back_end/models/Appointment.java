@@ -1,5 +1,6 @@
 package com.project.back_end.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
@@ -16,36 +17,43 @@ public class Appointment {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @ManyToOne
-        @NotNull
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "doctor_id")
+       @JsonManagedReference
         private  Doctor doctor;
 
-        @ManyToOne
-        @NotNull
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "patient_id")
+        @JsonManagedReference
         private  Patient patient;
 
         @Future(message = "Appointment date and time must be in the future.")
-        @NotNull
+        @NotNull(message = "Appointment date/time is required")
         private LocalDateTime appointmentTime;
 
-        @NotNull
+        @NotNull(message = "Status is required")
         private int status;
 
+        @NotNull(message = "Reason for visit is required")
+        private String reason_for_visit;
+
+        // *** METHODS **********************************8
         @Transient
-        public void getEndTime(){
-        appointmentTime = LocalDateTime.now();
+        public LocalDateTime getEndTime(){
+                    appointmentTime = LocalDateTime.now();
+                    return appointmentTime;
         }
 
         @Transient
-        public  void getAppointmentDate(){
-        LocalDate extractedDate = appointmentTime.toLocalDate();
-        //appointmentTime = LocalDateTime.now();
+        public  LocalDateTime getAppointmentDate(){
+        appointmentTime = LocalDateTime.now();
+            return appointmentTime;
         }
 
         @Transient
-        public   void getAppointmentTimeOnly(){
-        LocalTime extractedTime = appointmentTime.toLocalTime();
-        appointmentTime = LocalDateTime.now();
+        public   LocalDateTime getAppointmentTimeOnly(){
+            appointmentTime = LocalDateTime.now();
+            return appointmentTime;
         }
 
     // Parameterized constructor
@@ -98,6 +106,14 @@ public class Appointment {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getReason_for_visit() {
+        return reason_for_visit;
+    }
+
+    public void setReason_for_visit(String reason_for_visit) {
+        this.reason_for_visit = reason_for_visit;
     }
 
 } // *********** END OF CLASS *******************************

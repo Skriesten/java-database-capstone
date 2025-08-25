@@ -2,11 +2,10 @@ package com.project.back_end.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -20,27 +19,60 @@ public class Doctor {
     @NotNull(message = "Doctor's name must be entered.")
     private String name;
 
-        @NotNull
-        @Size(min = 3, max = 50)
-        private String specialty;
+    @NotNull(message = "User name is required.")
+    @Size(min = 3, max = 50)
+    private String userName;
 
-    @NotNull
+    @NotNull(message = "Specialty/Profession is required")
+    @Size(min = 3, max = 50)
+    private String specialty;
+
+    @NotNull(message = "Email is required")
     @Email
     private String email;
 
-    @NotNull
+    @NotNull(message = "Password is required")
     @Size(min = 6)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotNull
+    @NotNull(message = "Phone number must be provided")
     @Pattern(regexp= "^[0-9]{10}$")
     private String phone;
+
+    @NotNull(message = "Date hired must be provided.")
+    @PastOrPresent
+    private LocalDate date_hired;
+
+    private Boolean active;
+    private Double salary;
+
+    @NotNull(message = "Medical License number must be filled in.")
+    private String medical_license_no;
+
+    @NotNull(message = "Clinic address must be filled in.")
+    private String clinic_address;
 
     @ElementCollection
     private List<String> availableTimes;
 
+    @OneToMany(mappedBy = "doctor")
+    private Collection<Appointment> appointment;
+
+    @OneToMany(mappedBy = "doctor")
+    private Collection<Patient_Record>  patientRecords;
+
+
     //  *********  GETTERS AND SETTERS  ********************
+
+    public Collection<Appointment> getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Collection<Appointment> appointment) {
+        this.appointment = appointment;
+    }
+
     public Long getId() {
         return id;
     }
@@ -96,6 +128,64 @@ public class Doctor {
     public void setAvailableTimes(List<String> availableTimes) {
         this.availableTimes = availableTimes;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public LocalDate getDate_hired() {
+        return date_hired;
+    }
+
+    public void setDate_hired(LocalDate date_hired) {
+        this.date_hired = date_hired;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
+
+    public String getMedical_license_no() {
+        return medical_license_no;
+    }
+
+    public void setMedical_license_no(String medical_license_no) {
+        this.medical_license_no = medical_license_no;
+    }
+
+    public String getClinic_address() {
+        return clinic_address;
+    }
+
+    public void setClinic_address(String clinic_address) {
+        this.clinic_address = clinic_address;
+    }
+
+    public Collection<Patient_Record> getPatientRecords() {
+        return patientRecords;
+    }
+
+    public void setPatientRecords(Collection<Patient_Record> patientRecords) {
+        this.patientRecords = patientRecords;
+    }
+
+
 }        //  ===========  END OF CLASS =========================
 
 // ************* INSTRUCTIONS *************************

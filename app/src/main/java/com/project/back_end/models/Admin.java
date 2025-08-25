@@ -5,7 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 public class Admin {
@@ -14,12 +17,26 @@ public class Admin {
         @GeneratedValue(strategy= GenerationType.IDENTITY)
         private Long id;
 
+        @NotNull
+        private String name;
+
         @NotNull(message = "Field must be populated.")
         private String userName;
 
         @NotNull(message = "Password must be filled in.")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String password;
+
+        @NotNull(message = "Role is required")
+        private String role;
+
+        @NotNull(message = "Email is required")
+        @Email
+        private String email;
+
+        @NotNull(message = "Date hired is required")
+        @PastOrPresent
+        private String date_hired;
 
         // Parameterized Constructor
         public Admin(Long id, String userName, String password) {

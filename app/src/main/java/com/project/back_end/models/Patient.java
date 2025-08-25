@@ -1,13 +1,11 @@
 package com.project.back_end.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Patient {
@@ -19,6 +17,10 @@ public class Patient {
     @NotNull(message = "Name must be provided, cannot be more than 100 characters.")
     @Size(min = 3, max = 100)
     private String name;
+
+    @NotNull
+    @Size(min = 3, max = 50)
+    private String userName;
 
     @NotNull(message = "Email must be provided.")
     @Email
@@ -35,6 +37,37 @@ public class Patient {
     @NotNull(message = "Address must be provided")
     @Size(max = 255)
     private String address;
+
+    @NotNull(message = "Role must be filled in.")
+    private String role;
+
+    @NotNull(message = "Birth date must be filled in")
+    @Past
+    private LocalDate date_of_birth;
+
+    @NotNull(message = "Registration date must be filled in.")
+    @PastOrPresent
+    private LocalDate date_registered;
+
+    @NotNull(message = "Gender, MALE or FEMAILE must be filled in.")
+    private String gender;
+
+    @NotNull
+    @Size(min = 3, max = 100)
+    private String emergency_contact;
+
+    @NotNull
+    private Boolean active;
+
+    @OneToMany(mappedBy = "patient")
+    private Collection<Appointment> appointment;
+
+    @OneToMany(mappedBy = "patient")
+    private List<Patient>  patient_id;
+
+    @OneToMany(mappedBy = "patient")
+    private Collection<Patient_Record>  patientRecords;
+
 
     // ****  GETTERS AND SETTERS **************************
     public Long getId() {
@@ -85,6 +118,85 @@ public class Patient {
         this.address = address;
     }
 
+    public Collection<Appointment> getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Collection<Appointment> appointment) {
+        this.appointment = appointment;
+    }
+
+    public List<Patient> getPatient_id() {
+        return patient_id;
+    }
+
+    public void setPatient_id(List<Patient> patient_id) {
+        this.patient_id = patient_id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public LocalDate getDate_of_birth() {
+        return date_of_birth;
+    }
+
+    public void setDate_of_birth(LocalDate date_of_birth) {
+        this.date_of_birth = date_of_birth;
+    }
+
+    public LocalDate getDate_registered() {
+        return date_registered;
+    }
+
+    public void setDate_registered(LocalDate date_registered) {
+        this.date_registered = date_registered;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getEmergency_contact() {
+        return emergency_contact;
+    }
+
+    public void setEmergency_contact(String emergency_contact) {
+        this.emergency_contact = emergency_contact;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Collection<Patient_Record> getPatientRecords() {
+        return patientRecords;
+    }
+
+    public void setPatientRecords(Collection<Patient_Record> patientRecords) {
+        this.patientRecords = patientRecords;
+    }
 }  // ********** END OF CLASS  ******************************
 
 //  **********  INSTRUCTIONS  *****************************
