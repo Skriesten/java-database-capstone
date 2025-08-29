@@ -25,7 +25,7 @@ public class Doctor {
     private String userName;
 
     @NotNull(message = "Specialty/Profession is required")
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 100)
     private String specialty;
 
     @NotNull(message = "Email is required")
@@ -41,6 +41,9 @@ public class Doctor {
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")// Alternate @Pattern(regexp = "\\d{10}")
     private String phone;
 
+    @NotNull(message = "Role must be filled in.")
+    private String role;
+
     @NotNull(message = "Date hired must be provided.")
     @PastOrPresent
     private LocalDate date_hired;
@@ -52,16 +55,19 @@ public class Doctor {
     private String medical_license_no;
 
     @NotNull(message = "Clinic address must be filled in.")
+    @Size(min = 3, max = 200)
     private String clinic_address;
 
     @ElementCollection
-    private List<String> availableTimes;  //List of available time slots (Example: "09:00 -10:00")
+    private List<String> available_times;  //List of available time slots (Example: "09:00 -10:00")
 
     @OneToMany(mappedBy = "doctor")
     private Collection<Appointment> appointment;
 
     @OneToMany(mappedBy = "doctor")
     private Collection<Patient_Record>  patientRecords;
+
+
 
     //  *********  GETTERS AND SETTERS  ********************
 
@@ -122,11 +128,11 @@ public class Doctor {
     }
 
     public List<String> getAvailableTimes() {
-        return availableTimes;
+        return available_times;
     }
 
-    public void setAvailableTimes(List<String> availableTimes) {
-        this.availableTimes = availableTimes;
+    public void setAvailableTimes(List<String> available_times) {
+        this.available_times = available_times;
     }
 
     public String getUserName() {
@@ -177,6 +183,7 @@ public class Doctor {
         this.clinic_address = clinic_address;
     }
 
+
     public Collection<Patient_Record> getPatientRecords() {
         return patientRecords;
     }
@@ -185,6 +192,13 @@ public class Doctor {
         this.patientRecords = patientRecords;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }        //  ===========  END OF CLASS =========================
 
 // ************* INSTRUCTIONS *************************

@@ -25,7 +25,7 @@ public class Appointment {
         @JsonManagedReference
         private  Patient patient;
 
-        private LocalDateTime appointmentTime;
+        private LocalDateTime appointment_time;
 
         @NotNull(message = "Status is required")
         private int status;
@@ -54,11 +54,11 @@ public class Appointment {
         }
 
     // Parameterized constructor
-    public Appointment(Long id, Doctor doctor, Patient patient, LocalDateTime appointmentTime, int status) {
+    public Appointment(Long id, Doctor doctor, Patient patient, LocalDateTime appointment_time, int status) {
         this.id = id;
         this.doctor = doctor;
         this.patient = patient;
-        this.appointmentTime = appointmentTime;
+        this.appointment_time = appointment_time;
         this.status = status;
     }
 
@@ -90,11 +90,11 @@ public class Appointment {
     }
 
     public LocalDateTime getAppointmentTime() {
-        return appointmentTime;
+        return appointment_time;
     }
 
-    public void setAppointmentTime(LocalDateTime appointmentTime) {
-        this.appointmentTime = appointmentTime;
+    public void setAppointmentTime(LocalDateTime appointment_time) {
+        this.appointment_time = appointment_time;
     }
 
     public int getStatus() {

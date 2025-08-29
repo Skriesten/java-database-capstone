@@ -20,7 +20,7 @@ public class Patient {
 
     @NotNull
     @Size(min = 3, max = 50)
-    private String userName;
+    private String user_name;
 
     @NotNull(message = "Email must be provided.")
     @Email
@@ -135,11 +135,11 @@ public class Patient {
     }
 
     public String getUserName() {
-        return userName;
+        return user_name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String user_name) {
+        this.user_name = user_name;
     }
 
     public String getRole() {
