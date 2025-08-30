@@ -1,6 +1,52 @@
 package com.project.back_end.services;
 
+import ch.qos.logback.core.subst.Token;
+import com.project.back_end.models.Admin;
+import com.project.back_end.repo.AdminRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+
 public class Service {
+    private AdminRepository adminRepo;
+    public ResponseEntity<String> validateToken(String username, String password) {
+        return ResponseEntity.ok().build();
+    }
+
+//    public ResponseEntity<String> validateAdmin(String username, String password) {
+//        if (username.equals("admin") && password.equals("admin@1234")){
+//                       return ResponseEntity.ok().build();
+//        } else {
+//         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
+
+//    public String validateAdmin(String username, String password) {
+//        try {
+//            // 1. Search the repository for the provided username.
+//
+//            Admin admin = adminRepo.findByUsername(username).
+//                  .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password"));
+//
+//            // 2. Check if the password matches.
+//            // Note: In a real application, you should use a password encoder like BCrypt.
+//            if (password.equals(admin.getPassword())) {
+//                // 3. Generate and return a JWT token if the password is correct.
+//                Object jwtUtil = null;
+//                return jwtUtil.generateToken(admin.getUserName());
+//            } else {
+//                // 4. Return 401 Unauthorized if the password is incorrect.
+//                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
+//            }
+//        } catch (ResponseStatusException ex) {
+//            throw ex;
+//        } catch (Exception ex) {
+//            // 5. Catch any unexpected errors.
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", ex);
+//        }
+} // *******  END OF CLASS  *******************************
+
+// ************  INSTRUCTIONS  ***************************
 // 1. **@Service Annotation**
 // The @Service annotation marks this class as a service component in Spring. This allows Spring to automatically detect it through component scanning
 // and manage its lifecycle, enabling it to be injected into controllers or other services using @Autowired or constructor injection.
@@ -63,4 +109,3 @@ public class Service {
 // This flexible method supports patient-specific querying and enhances user experience on the client side.
 
 
-}
