@@ -1,3 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="icon" href="assets/images/logo/logo.png">
+    <link rel="stylesheet" href="./assets/css/index.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script src="./js/util.js" defer></script>
+    <script src="./js/render.js" defer></script>
+    <script src="./js/components/header.js" defer></script>
+    <script src="./js/components/footer.js" defer></script>
+</head>
+<body>
+<main class="main-content">
+    <h2>Select your role</h2>
+    <input type="button" value="Admin" id="Btn_admin" onclick="window.location.href='admin.html'">
+    <input type="button" value="Doctor" id="Btn_Doctor" onclick="window.location.href='doctor.html'">
+    <input type="button" value="Patient" id="Btn_Patient" onclick="window.location.href='patient.html'">
+    <div class="container">
+        <div class="wrapper">
+            <div class="header">
+
+            </div>
+            <div class="footer">
+
+            </div>
+        </div>
+    </div>
+</main>
+<div id="modal" class="modal">
+    <input type="button" id="closeModal"></input>
+    <div id="modal-body">
+
+    </div>
+</div>
+
+
+
+<script type="module" src=" ./js/services/index.js" defer></script>
+</body>
+
 <!-- index.html -->
 <!-- 
 
@@ -64,7 +106,8 @@ and triggers modal-based login functionality.
 
 12. Use a Wrapper for Structure
 
-    * Inside the container, add a wrapper to group header, main, and footer sections logically.
+    * Inside the container, add a wrapper to group header, main,
+        and footer sections logically.
 
 13. Insert a Header Placeholder
 
