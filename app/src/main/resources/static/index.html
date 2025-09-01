@@ -1,8 +1,9 @@
+<!--index.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>Select Role</title>
     <link rel="icon" href="assets/images/logo/logo.png">
     <link rel="stylesheet" href="./assets/css/index.css">
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -12,34 +13,28 @@
     <script src="./js/components/footer.js" defer></script>
 </head>
 <body>
-<main class="main-content">
-    <h2>Select your role</h2>
-    <input type="button" value="Admin" id="Btn_admin" onclick="window.location.href='admin.html'">
-    <input type="button" value="Doctor" id="Btn_Doctor" onclick="window.location.href='doctor.html'">
-    <input type="button" value="Patient" id="Btn_Patient" onclick="window.location.href='patient.html'">
+<main class="container">
     <div class="container">
         <div class="wrapper">
-            <div class="header">
-
-            </div>
-            <div class="footer">
-
-            </div>
+            <div class="header">    </div>
+            <main class="main-content">
+                <h2>Select your role</h2>
+                <input type="button" class="choiceButton" value="Admin" id="Btn_admin" onclick="window.location.href='../templates/admin/adminDashboard.html'">
+                <input type="button" class="choiceButton" value="Doctor" id="Btn_Doctor" onclick="window.location.href='../templates/doctor/doctorDashboard.html'">
+                <input type="button" class="choiceButton" value="Patient" id="Btn_Patient" onclick="window.location.href='../static/pages/patientDashboard.html'">
+            </main>
+            <div class="footer" id="footer">  </div>
         </div>
     </div>
 </main>
 <div id="modal" class="modal">
-    <input type="button" id="closeModal"></input>
-    <div id="modal-body">
-
+        <input type="button" id="closeModal"></input>
+        <div id="modal-body">
     </div>
 </div>
-
-
-
 <script type="module" src=" ./js/services/index.js" defer></script>
 </body>
-
+</html>
 <!-- index.html -->
 <!-- 
 

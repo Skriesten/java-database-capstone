@@ -11,7 +11,7 @@
    Return the 'doctors' array from the response
    If there's an error (e.g., network issue), log it and return an empty array
 
-
+export function deleteDoctor(){}
   Function: deleteDoctor
   Purpose: Delete a specific doctor using their ID and an authentication token
 
