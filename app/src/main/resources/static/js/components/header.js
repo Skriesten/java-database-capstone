@@ -1,20 +1,22 @@
+//  ******  This is the HEADER script page for all pages. ***************
 
 //1. Define the `renderHeader` Function
 function renderHeader() {
-    //2.  Select the Header Div
+
+//2.  Select the Header Div, assign to variable.
     const headerDiv = document.getElementById('header');
 
-    //3. Check if the Current Page is the Root Page
-    if (window.location.pathname.endsWith("/")) {
+//3. Check if the Current Page is the Root Page
+    if (window.location.pathname.endsWith("index.html")) {
         localStorage.removeItem("userRole");
-        headerDiv.innerHTML = `
-           <header class="header">
-             <div class="logo-section">
-               <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
-               <span class="logo-title">Hospital CMS</span>
-             </div>
-           </header>`;
-        return;
+            headerDiv.innerHTML =
+                            `<header class="header">
+                             <div class="logo-img">
+                               <img src="../../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+                               <span class="logo-title">Hospital CMS</span>
+                             </div>
+            </header>`;
+        //return;
 
         //4. Retrieve the User's Role and Token from LocalStorage}
         const role = localStorage.getItem("userRole");
@@ -23,7 +25,7 @@ function renderHeader() {
         // 5.**  Initialize Header Content  ****
         let headerContent = `<header class="header">
          <div class="logo-section">
-           <img src="../assets/images/logo/logo.png" alt="Hospital CRM 
+           <img src="../../assets/images/logo/logo.png" alt="Hospital CRM 
                     Logo" class="logo-img">
            <span class="logo-title">Hospital CMS</span>
          </div>
@@ -64,9 +66,10 @@ function renderHeader() {
         const myButton = document.getElementById("myButton");
 
         myButton.addEventListener("click", (event) => { });
-}
+    }
 
 }// **********  End of  renderHeader function  **********************
+
     function logout() {
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");

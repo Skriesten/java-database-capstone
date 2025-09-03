@@ -3,14 +3,14 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
-    <link rel="icon" type="image/png" th:href="@{/assets/images/logo/logo.png}" />
+    <link rel="icon" type="image/png" th:href="@{/../../assets/images/logo/logo.png}" />
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" th:href="@{resources/static/assets/css/adminDashboard.css}">
-    <link rel="stylesheet" th:href="@{resources/static/assets/css/style.css}"/>
-    <script  th:src="@{static/js/render.js}" defer></script>
-    <script  th:src="@{static/js/util.js}" defer></script>
-    <script  th:src="@{static/js/header.js}" defer></script>
-    <script  th:src="@{static/js/footer.js}" defer></script>
+    <link rel="stylesheet" th:href="@{../..//static/assets/css/adminDashboard.css}">
+    <link rel="stylesheet" th:href="@{../..//static/assets/css/style.css}"/>
+    <script  th:src="@{../../static/js/render.js}"  defer></script>
+    <script  th:src="@{../../static/js/util.js}"       defer></script>
+    <script  th:src="@{../../static/js/header.js}" defer></script>
+    <script th:src="@{../../static/js/footer.js}" defer></script>
 </head>
 <body onload="renderContent()">
     <div class="container">
@@ -34,15 +34,13 @@
         </div>
     </div>
 
-<!--    The modal div is for a pop up window to show selectable data.-->
+<!--    The modal div is for a pop up window for adding Doctor data.-->
     <div id="modal" class="modal">
         <span id="closeModal" class="close">&times;</span>
         <div id="modal-body"></div>
     </div>
-
-
-<script type="module" src="static/js/components/doctorCard.js" defer></script>
-<script type="module" src="static/js/adminDashboard.js" defer></script>
+<script type="module" src="../../static/js/components/doctorCard.js" defer></script>
+<script type="module" src="../../static/js/adminDashboard.js" defer></script>
 </body>
 
 <!--  *********  INSTRUCTIONS ******************************

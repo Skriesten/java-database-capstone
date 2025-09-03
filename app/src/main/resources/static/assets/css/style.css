@@ -128,23 +128,24 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+   color: #003e3e;
   }
   
   .footer-column h4 {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 8px;
-    color: #0a0a23;
+      color: #003e3e;
   }
   
   .footer-column a {
     text-decoration: none;
-    color: #0a0a23;
+      color: #003e3e;
     font-size: 14px;
   }
   
   .footer-column a:hover {
-    color: #003e3e;
+      color: #4b1c17;
     transition: color 0.3s ease;
   }
   
@@ -201,8 +202,6 @@
     color: black;
   }
 
-
-
   .dashboard-btn{
     width: 100%;
   }
@@ -237,7 +236,6 @@
     font-size: 16px;
     padding: 10px;
   }
-  
 
   #content {
     display: grid;
@@ -330,7 +328,6 @@
   width: 350px;
   display: flex;
   flex-direction: row;
-  
 }
 
 .filter-select {
@@ -379,4 +376,3 @@
   margin-right: 0.5rem;
   accent-color: #015c5db8; 
 }
-

@@ -1,3 +1,111 @@
+// index.js  API/ Logic Handlers
+
+// Import Required Modules : At the top of the file, import:
+// • The openModal function from the modal component file ../components/modals.js.
+//     The API_BASE_URL constant from your configuration file ../config/config.js.
+
+import {openModal} from "../components/modals";
+import {API_BASE_URL} from "../config/config.js";
+import {BASE_URL}  from "../config/config.js";
+
+// define two constants:
+    const ADMIN_API = API_BASE_URL + '/admin';
+    const DOCTOR_API = API_BASE_URL + '/doctor/login';
+
+// Use window.onload to ensure the script runs after the page is fully loaded.
+//     Select the Admin and Doctor login buttons by their id attributes.
+//     Attach click event listeners to these buttons.
+
+    window.onload = function() {
+        const adminBtn = document.getElementById('adminLogin');
+        const doctorBtn = document.getElementById('login');
+
+        if (adminBtn) {
+            adminBtn.addEventListener('click', (e) => {
+                openModal('adminLogin');
+            });
+        }
+        if (doctorBtn) {
+            doctorBtn.addEventListener('click', function () {
+                // Code to execute when Doctor button is clicked
+                openModal('login');
+            });
+        }
+    }
+
+    async function adminLoginHandler() {
+        let username;
+        let password;
+        let role;
+        const admin = {username, password};
+       try {
+               await fetch(ADMIN_API, {
+                   method: 'POST',
+                   headers: {'Content-Type': 'application/json'},
+                   body: JSON.stringify(admin)
+               });
+
+           localStorage.setItem('role', JSON.stringify(role));
+           selectRole(admin);
+       }catch (error) {
+           console.error(error)
+           alert("Invalid credentials");
+       }
+    }
+
+const doctorLoginHandler = async () => {
+    try {
+        // 1. Read the email and password values from the input fields
+        const email = document.querySelector('#doctor-email').value;
+        const password = document.querySelector('#doctor-password').value;
+
+        // 2. Create a doctor object with these values
+        const doctor = { email, password };
+
+        // 3. Send a POST request to the Doctor login endpoint
+        const response =
+                await fetch('/api/doctor/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(doctor),
+        });
+
+        // Handle server responses
+        if (response.ok) {
+            // 4. On success: Store the received token in localStorage
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
+
+            // 5. Call a helper function selectRole() with "doctor" to save the selected role
+            // Assuming a `selectRole` function is defined globally (e.g., in render.js)
+            if (typeof selectRole === 'function') {
+                selectRole('doctor');
+            } else {
+                alert('Invalid credentials, cannot go any further.');
+            }
+
+            // Optional: Redirect or update UI after successful login
+            window.location.href = '/doctor-dashboard.html';
+        } else {
+            // 6. On failure: alert the user about invalid credentials
+            const errorData = await response.json();
+            alert(`Login failed: ${errorData.message}`);
+        }
+    } catch (error) {
+        // 7. Handle unexpected issues using try-catch
+        console.error('An unexpected error occurred during doctor login:', error);
+        alert('An error occurred during login. Please try again.');
+    }
+};
+
+// Expose the function globally, if necessary, by attaching it to the window object.
+// This allows the function to be called from a button's `onclick` event in index.html.
+window.doctorLoginHandler = doctorLoginHandler;
+
+
+
+
+
 /*
   Import the openModal function to handle showing login popups/modals
   Import the base API URL from the config file

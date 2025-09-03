@@ -70,6 +70,7 @@ body{
 .footer{
     display: flex;
     flex-wrap: wrap;
+    color:black;
 }
 
  .modal{

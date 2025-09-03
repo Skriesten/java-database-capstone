@@ -1,5 +1,8 @@
 // config.js
 
+//fetch(`${API-BASE_URL}/api/appointments`);
+
+
 /**
  * Configuration file for defining global constants and environment-specific settings.
  * 
@@ -11,4 +14,4 @@
  *   fetch(`${API_BASE_URL}/api/appointments`)
  */
 
-export const API_BASE_URL = "http://localhost:8080";
+export const API_BASE_URL = "http://localhost:8081";
