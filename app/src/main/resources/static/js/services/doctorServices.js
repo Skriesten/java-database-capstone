@@ -3,21 +3,27 @@ import {API_BASE_URL} from "../config/config";
 const DOCTOR_API = API_BASE_URL + '/doctor';
 
 // *** GET DOCTOR FUNCTION ******************
-async  function getDoctors(){
-    let username;
-    let password;
-    const doctors = {username, password};
-    await fetch(DOCTOR_API, {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({doctors})
-        });
+export async  function getDoctors(){
+ try {
+     let username;
+     let password;
+     const doctors = {username, password};
+     await fetch(`${DOCTOR_API}`,
+         {
+             method: 'GET',
+             headers: {'Content-Type': 'application/json'},
+             body: JSON.stringify({doctors})
+         });
+ } catch (error) {
+     console.log(error.message);
+     alert("Could not find doctor");
+ }
 } // End of getDoctors function
 
 // ***  DELETE DOCTOR FUNCTION ****************
 export async function deleteDoctor(id, token) {
         // 1. Construct the full endpoint URL using a template literal.
-        const endpoint = DOCTOR_API + '/${id}${token}';
+        const endpoint = `${DOCTOR_API} /${id}${token}`;
         // 2. Send the DELETE request with the authentication token.
         const response =
             await fetch(endpoint, {
@@ -35,65 +41,51 @@ export async function deleteDoctor(id, token) {
 } // End of deleteDoctor function
 
 // *** SAVE DOCTOR FUNCTION  ***************************
-async function saveDoctor(doctor, token) {
+export async function saveDoctor(doctor, token) {
     const doctorNew = {name, email, phone, password, role, specialty,date_hired, active,
         salary, medical_license_no, clinic_address, token};
-
+    try {
     const response =
-            await fetch(DOCTOR_API, {
+            await fetch(`${DOCTOR_API}/create`,
+            {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(doctorNew)
             });
-    if(!response.ok) {
-        response.json().catch(() => ({message: response.statusText}));
-    }
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({message: response.statusText}));
-        throw new Error(`HTTP Error: ${response.status} - ${errorData.message}`);
+
+        if (response.ok) {
+            const data = await response.json();
+        } else {
+            const errorData = await response.json().catch(() => ({message: response.statusText}));
+            console.error(`HTTP Error: ${response.status} - ${errorData.message}`);
+        }
+    }catch(error) {
+        alert("Could not create Doctor");
     }
 } // End of saveDoctor function
 
+
 // *** FILTER DOCTORS FUNCTION  *************************** //
-async  function  filterDoctors(name, time, specialty) {
-const response = await fetch(DOCTOR_API, {
-    method: 'GET',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({name, time, specialty})
-});
-    const params = new URLSearchParams();
+export async  function  filterDoctors(name, time, specialty) {
 
-    // Add parameters only if they are provided and not empty
-    if (name) {
-        params.append('name', name);
-    }
-    if (time) {
-        params.append('time', time);
-    }
-    if (specialty) {
-        params.append('specialty', specialty);
-    }
-    // Construct the full URL with query parameters
-    const requestUrl = DOCTOR_API + `?${params.toString()}`;
-    try {
-        const response = await fetch(DOCTOR_API, {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({name, time, specialty})
-        });
-        // Return the list of doctors
-        return await response.json();
+        try {
+            const response = await fetch(`${DOCTOR_API}/filter/$(name)/$(time)/$(specialty)`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+            });
 
-        // Check for HTTP errors (e.g., 404 Not Found, 500 Server Error)
-        if (!response.ok) {
-            // Throw an error with the status code for specific handling
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-    } catch (error) {
-        // Handle network errors or other issues with the request
-        console.error('Failed to filter doctors:', error);
-        alert(`Error: Could not retrieve doctors. ${error.message}`);
-        // Return an empty list to prevent the application from crashing
+    // Return the list of doctors if response is OK
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    } else {
+        console.error("Failed to fetch doctors", response.statusText);
+        // Throw an error with the status code for specific handling
+        return [];
+    }
+}catch (error) {
+          console.error('Failed to filter doctors:', error);
+          // Return an empty list to prevent the application from crashing
         return [];
     }
 }  // End of filterDoctors function
