@@ -5,12 +5,29 @@ import {filterDoctors} from "./services/doctorServices.js";
 import {saveDoctor} from "./services/doctorServices.js";
 
 
-
 document.getElementById('addDoctor').
     addEventListener('click', (e) => { openModal('addDoctor');
 });
 window.onload = () => {loadDoctorCards()};
 
+document.getElementById('searchBar').addEventListener("input", filterDoctorsOnChange);
+document.getElementById("filterTime").addEventListener("change", filterDoctorsOnChange);
+document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);
+
+document.createElement("<input type=button value='Submit'  />").addEventListener("click", adminAddDoctor);
+try {
+    const authToken = localStorage.getItem("token");
+    if (!authToken) {
+        alert("Admin not authenticated.  Please log in.");
+        return;
+    }
+    const response = await createDoctorCard(authToken);
+} catch (error) {
+    alert(error);
+}
+
+
+//  **** FUNCTION LOADDOCTORCARDS   ********************
 function loadDoctorCards(){
     const contentDiv = document.getElementById('content');
     contentDiv.innerHTML = ""
@@ -20,10 +37,7 @@ function loadDoctorCards(){
     }
 }
 
-document.getElementById('searchBar').addEventListener("input", filterDoctorsOnChange);
-document.getElementById("filterTime").addEventListener("change", filterDoctorsOnChange);
-document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);
-
+//  *** FUNCTION FILTERDOCTORONCHANGE  **************
 function filterDoctorsOnChange(e){
     const results = filterDoctors();
     if (!results.ok ) {
@@ -31,6 +45,7 @@ function filterDoctorsOnChange(e){
     }
 }
 
+//  ***  FUNCTION RENDERDOCTORCARDS  *******************
 function renderDoctorCards(doctors){
     const contentDiv = document.getElementById('content');
     contentDiv.innerHTML = ""
@@ -39,7 +54,8 @@ function renderDoctorCards(doctors){
     }
 }
 
-function adminAddDoctor(){
+// *** FUNCTION ADMINADDDOCTOR  ********************
+async function adminAddDoctor(){
     document.getElementById('addDoctor').addEventListener('click', (e) => {
         openModal();
     });
@@ -54,6 +70,60 @@ function adminAddDoctor(){
         '<p>Salary:<p th:text = @{salary}></p><br></p>' +
         '<p>Medial License:<p th:text = @{medical_license_no}></p><br></p>' +
         '<p>Clinic Address:<p th:text = @{clinic_address}></p></p>'
+
+
+    ///  ************  GOOGLE AI VERSION  ****************************
+    async function handleDoctorSubmission(doctorData) {
+        try {
+            // Verify valid login token (e.g., from localStorage or a global state)
+            const authToken = localStorage.getItem('adminAuthToken'); // Replace with your token retrieval
+            if (!authToken) {
+                alert('Admin not authenticated. Please log in.');
+                return;
+            }
+// Send POST request using saveDoctor
+            const response = await saveDoctor(doctorData, authToken);
+
+            if (response.success) { // Assuming saveDoctor returns an object with a 'success' property
+                // Close modal, reload page/doctor list, show success message
+                document.getElementById('closeModal').onclick = () => {
+                    document.getElementById('modal').style.display = 'none';
+                };
+                alert('Doctor added successfully!');
+                // Reload doctor list or refresh page
+                // location.reload(); // If reloading the whole page is desired
+                refreshDoctorList(); // Call a function to refresh only the doctor list
+            } else {
+                alert('Failed to add doctor: ' + response.message); // Display specific error from backend
+            }
+        } catch (error) {
+            console.error('Error adding doctor:', error);
+            alert('An error occurred while adding the doctor.');
+        }
+    }
+// Placeholder for saveDoctor in ./services/doctorServices.js
+// This would typically involve using fetch API to send the request
+//
+//     export const saveDoctor = async (doctorData, token) => {
+//         const response = await fetch('/api/doctors', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${token}`
+//             },
+//             body: JSON.stringify(doctorData)
+//         });
+//         const data = await response.json();
+//         return data; // Assuming data contains success status and message
+//     };
+
+
+// Placeholder for refreshDoctorList (e.g., fetch and re-render doctor data)
+//     function refreshDoctorList() {
+//         console.log('Refreshing doctor list...');
+//         // Implement logic to fetch and display updated doctor list
+//     }
+
 }
 
 

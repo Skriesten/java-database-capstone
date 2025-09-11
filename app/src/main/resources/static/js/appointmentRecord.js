@@ -5,7 +5,7 @@ import { getAppointmentRecord } from "./services/appointmentRecordService.js";
 const tableBody = document.getElementById("patientTableBody");
 const filterSelect = document.getElementById("appointmentFilter");
 
-async function loadAppointments(filter = "upcoming") {
+export async function loadAppointments(filter = "upcoming") {
   const appointments = await getAppointmentRecord();
 
   if (!appointments || appointments.length === 0) {

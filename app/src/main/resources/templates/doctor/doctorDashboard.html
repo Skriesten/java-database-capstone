@@ -19,13 +19,14 @@
     <script src="../../static/js/services/patientServices.js"></script>
     <script src="../../static/js/doctorDashboard.js"></script>
 </head>
+
 <body>
 <div class="container">
     <div class="wrapper">
         <div id="header">
             <main class="main-content">
                 <input type="text" id="searchBar" placeholder="Search Doctor"/>
-                <input type="button" class="button" value="Today's Appointments" onclick="getAppointments();"/>
+                <input type="button" class="button" id="todayButton" value="Today's Appointments" onclick="getAppointments();"/>
                 <input type="date" id="datepicker"/>
                 <table id="patientTable"></table>
             </main>
