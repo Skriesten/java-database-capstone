@@ -6,9 +6,16 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin,Long> {
+public interface AdminRepository extends JpaRepository<Admin,Long> {  // Repo Class
 
-public Admin findByUsername(String userName);
+    // Extract email method
+    public String extractEmail(String token);
+
+    // findbyUserName method
+public String findByUsername(String userName);
+
+
+
 
 } // ***************  END OF CLASS  *******************************
 

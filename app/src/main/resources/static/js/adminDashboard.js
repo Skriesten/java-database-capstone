@@ -71,7 +71,6 @@ async function adminAddDoctor(){
         '<p>Medial License:<p th:text = @{medical_license_no}></p><br></p>' +
         '<p>Clinic Address:<p th:text = @{clinic_address}></p></p>'
 
-
     ///  ************  GOOGLE AI VERSION  ****************************
     async function handleDoctorSubmission(doctorData) {
         try {
@@ -81,7 +80,7 @@ async function adminAddDoctor(){
                 alert('Admin not authenticated. Please log in.');
                 return;
             }
-// Send POST request using saveDoctor
+            // Send POST request using saveDoctor
             const response = await saveDoctor(doctorData, authToken);
 
             if (response.success) { // Assuming saveDoctor returns an object with a 'success' property
