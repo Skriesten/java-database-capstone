@@ -1,7 +1,57 @@
 package com.project.back_end.repo;
 
-public interface AppointmentRepository  {
+import com.project.back_end.models.Appointment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+public interface AppointmentRepository  extends JpaRepository<Appointment,Long> {
+    @Query("select a, d.id, dat from Doctor d left join Appointment a"
+                    + " on a.doctor.id = d.id left join DoctorAvailableTimes dat on d.id = dat.doctor.id"
+                     +   " where  a.appointment_time > :start "
+                    + " and a.appointment_time < :end")
+    public List<Appointment> findByDoctorIdAndAppointmentTimeBetween(Long doctorId,
+                                                                     LocalDateTime start, LocalDateTime end);
+
+    @Query("select d, p.name from Doctor d left join Appointment a on d.id = a.doctor.id "
+                    +" left join Patient p on p.id = a.patient.id "
+                    + " where a.appointment_time > :start and a.appointment_time < :end "
+                    + " and d.id = :doctor_id and p.name like ':patientName%' "    )
+    public List<Appointment>findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(Long doctorId,
+                                                                    String patientName, LocalDateTime start, LocalDateTime end);
+
+    @Modifying
+    @Transactional
+    public void deleteAllByDoctorId(Long doctorId);
+
+    public List<Appointment> findByPatientId(Long doctorId);
+
+    public List<Appointment> findByPatient_IdAndStatusOrderByAppointmentTimeAsc(Long patientId, int status);
+
+    @Query("SELECT a from Appointment a, Doctor d "
+                    + " where a.doctor.id = d.id and "
+                    + " LOWER(d.name ) like LOWER(':doctorName%' ) and "
+                    + " a.patient.id = :patientId")
+    public List<Appointment> filterByDoctorNameAndPatientId(String doctorName, Long patientId);
+
+    @Query("select d.name, p.name, a. from Appointment a, Doctor d, Patient p "
+                    + "where d.id = a.id and a.patient.id = p.id and "
+                    + "p.id = :patientId and a.status = :status and "
+                    + "lower(d.name) like lower(':doctorName')")
+    public List<Appointment> filterByDoctorNameAndPatientIdAndStatus(String doctorName, Long patientId, int status);
+
+    @Modifying
+    @Transactional
+    public void updateStatus(int status, Long id);
+
+
+// =========  INSTRUCTIONS  =========================================
    // 1. Extend JpaRepository:
 //    - The repository extends JpaRepository<Appointment, Long>, which gives it basic CRUD functionality.
 //    - The methods such as save, delete, update, and find are inherited without the need for explicit implementation.

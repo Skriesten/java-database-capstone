@@ -26,7 +26,7 @@
 .table{
     width: 100%;
     border-collapse: collapse;
-    font-family: "Sans Serif Collection";
+    font-family: "SansSerif", serif;
     margin-top: 20px;
 }
 .thead-header{

@@ -1,6 +1,7 @@
 package com.project.back_end.services;
 
-
+import com.project.back_end.repo.AdminRepository;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureAlgorithm;
@@ -16,66 +17,67 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import static io.jsonwebtoken.security.SignatureAlgorithm.*;
+
 @Component
 public class TokenService {
     String email;
     @Autowired
     private  SecretKey signingKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(System.getenv("PUBLIC_KEY")));
-
+    @Autowired
+    AdminRepository repo;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     // Constructor
-    public TokenService(SecretKey signingKey) {
-        this.signingKey = signingKey;
-    }
+    public TokenService(SecretKey signingKey) { this.signingKey = signingKey;}
 
     @DependsOn
     public SecretKey getSigningKey(String token){
-        byte[] keyBytes = this.jwtSecret.getBytes(StandardCharsets.UTF_8);
-        return  Keys.hmacShaKeyFor(keyBytes);
-    }
+            byte[] keyBytes = this.jwtSecret.getBytes(StandardCharsets.UTF_8);
+            return  Keys.hmacShaKeyFor(keyBytes);
+        }
 
-    @DependsOn
-    public String generateToken(String role){
-        Date issuedAt = new Date();
+        @DependsOn
+        public JwtBuilder generateToken(String role){
+            Date issuedAt = new Date();
+            // Set the expiration date for 7 days from now
+            long expirationTimeMillis = issuedAt.getTime() + TimeUnit.DAYS.toDays(7);
+            Date expiration = new Date(expirationTimeMillis);
+            // Build the JWT token
+            return Jwts.builder()
+                  .setSubject(email)
+                  .setIssuedAt(issuedAt)
+                  .setExpiration(expiration)
+                 .signWith(getSigningKey(String.valueOf(signingKey)));
 
-        // Set the expiration date for 7 days from now
-        long expirationTimeMillis = issuedAt.getTime() + TimeUnit.DAYS.toDays(7);
-        Date expiration = new Date(expirationTimeMillis);
-
-        // Build the JWT token
-        return Jwts.builder()
-              .setSubject(email)
-              .setIssuedAt(issuedAt)
-              .setExpiration(expiration)
-              .signWith(getSigningKey(signingKey, SignatureAlgorithm.HS256));
-              .compact();
     }
 
     public String extractEmail(String token){
-       if(getSigningKey(token)) {
+      // if(getSigningKey(token)) {
 
            String email;
            return token;
        }
-    }
+
+
 
     public  boolean validateToken(String token, String role){
-       String tokenRole = extractEmail(token);
+       String tokenRole = role; // =  extractEmail(token);
+
         if(tokenRole.equalsIgnoreCase(role) && role.equalsIgnoreCase("admin")){
                 return true;
             }else if(tokenRole.equalsIgnoreCase(role) &&role.equalsIgnoreCase("doctor")){
                 return true;
             } else if(tokenRole.equalsIgnoreCase(role) &&role.equalsIgnoreCase("patient")){
-                return true;  //
+                return true;
             } else {
                 return false;
             }
     }
 
-
+}
 /*  ****  INSTRUCTIONS ************************************    
  1. **@Component Annotation**
  The @Component annotation marks this class as a Spring component, meaning Spring will manage it as a bean within its application context.
@@ -116,4 +118,4 @@ public class TokenService {
  This ensures secure access control based on the user's role and their existence in the system.
 */
 
-}
+

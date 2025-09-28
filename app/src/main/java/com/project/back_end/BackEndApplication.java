@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
 //@SpringBootApplication
-@ComponentScan("com.project.back_end")
+//@ComponentScan("com.project.back_end")
 public class BackEndApplication {
 
 	public static void main(String[] args) {
