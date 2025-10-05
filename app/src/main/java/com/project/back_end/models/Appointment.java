@@ -31,7 +31,7 @@ public class Appointment {
         private int status;
 
         @NotNull(message = "Reason for visit is required")
-        private String reason_for_visit;
+        private String condition;
 
         // *** METHODS **********************************8
         @Transient
@@ -42,8 +42,8 @@ public class Appointment {
         }
 
         @Transient
-        public LocalDate getAppointmentDate(LocalDateTime appointmentTime) {
-        LocalDate apptDate = appointmentTime.toLocalDate();
+        public LocalDate getAppointmentDate() {
+        LocalDate apptDate = appointment_time.toLocalDate();
             return apptDate;
         }
 
@@ -106,11 +106,11 @@ public class Appointment {
     }
 
     public String getReason_for_visit() {
-        return reason_for_visit;
+        return condition;
     }
 
     public void setReason_for_visit(String reason_for_visit) {
-        this.reason_for_visit = reason_for_visit;
+        this.condition = reason_for_visit;
     }
 
 } // *********** END OF CLASS *******************************

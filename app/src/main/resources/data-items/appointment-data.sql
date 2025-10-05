@@ -1,5 +1,5 @@
 USE cms
-INSERT INTO appointment (appointment_time, status, doctor_id, patient_id,  reason_for_visit) VALUES
+INSERT INTO appointment (appointment_time, status, doctor_id, patient_id, condition) VALUES
              ('2025-05-01 09:00:00.000000', 0, 1, 1, 'CHECKUP'),
              ('2025-05-02 10:00:00.000000', 0,2, 2, 'CHECKUP'),
              ('2025-05-03 11:00:00.000000', 0,3, 3, 'CHECKUP'),

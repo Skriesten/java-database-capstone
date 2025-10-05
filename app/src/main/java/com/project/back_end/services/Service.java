@@ -1,52 +1,110 @@
 package com.project.back_end.services;
 
-import ch.qos.logback.core.subst.Token;
+import com.project.back_end.DTO.Login;
 import com.project.back_end.models.Admin;
+import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Patient;
 import com.project.back_end.repo.AdminRepository;
+import com.project.back_end.repo.DoctorRepository;
+import com.project.back_end.repo.PatientRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-@Service
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.util.*;
+
+ @Service
 public class Service {
 
-    public Service() {
+
+    private final TokenService tokenService;
+    private final AdminRepository adminRepository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+    private final DoctorService doctorService;
+    private final PatientService patientService;
+
+    // general construct
+    public Service(TokenService tokenService, AdminRepository adminRepository, DoctorRepository doctorRepository,
+                   PatientRepository patientRepository, DoctorService doctorService, PatientService patientService) {
+        this.tokenService = tokenService;
+        this.adminRepository = adminRepository;
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
+        this.doctorService = doctorService;
+        this.patientService = patientService;
     }
 
-    public ResponseEntity<String> validateToken(String username, String password) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Map<String, String>> validateToken(String user, String token) {
+      Admin admin = adminRepository.findByUsername(user);
+      if(admin.getPassword().equals(token)) {
+          return ResponseEntity.ok().build();
+      }
+      else {
+          return ResponseEntity.badRequest().build();
+      }
     }
 
-//    public ResponseEntity<String> validateAdmin(String username, String password) {
-//        if (username.equals("admin") && password.equals("admin@1234")){
-//                       return ResponseEntity.ok().build();
-//        } else {
-//         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//    }
-
-    public String validateAdmin(String username, String password) {
-        try {
-             1. Search the repository for the provided username.
-
-            Admin admin = adminRepo.findByUsername(username).
-                  .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password"));
-
-             2. Check if the password matches.
-             Note: In a real application, you should use a password encoder like BCrypt.
-            if (password.equals(admin.getPassword())) {
-                 3. Generate and return a JWT token if the password is correct.
-                Object jwtUtil = null;
-                return jwtUtil.generateToken(admin.getUserName());
-            } else {
-                 4. Return 401 Unauthorized if the password is incorrect.
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
+    public ResponseEntity<Map<String, String>>  validateAdmin(String username, String password) {
+        Admin admin = adminRepository.findByUsername(username);
+           if(admin.getPassword().equals(password)) {
+               tokenService.generateToken(username);
+               return ResponseEntity.ok().build();
             }
-        } catch (ResponseStatusException ex) {
-            throw ex;
-        } catch (Exception ex) {
-             5. Catch any unexpected errors.
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", ex);
+        else {
+            return ResponseEntity.badRequest().build();
         }
+    }
+
+    public Map<String, Object>  filterDoctor(String name, String specialty, String time){
+      Map<String, Object> filteredDoctors = doctorService.findDoctorByNameSpecialtyAndTime(name, specialty, time);
+      Map<String, Object> response = new HashMap<>();
+      response.put("doctors", filteredDoctors);
+      return response;
+    }
+
+    public int validateAppointment(Appointment appointment){
+        Long apptDoctorId = appointment.getDoctor().getId();
+        Long doctorId = doctorRepository.getReferenceById(apptDoctorId).getId();
+        LocalDate appointmentDate= appointment.getAppointmentDate();
+
+        if(apptDoctorId.equals(doctorId)){
+            if(appointmentDate.isEqual((ChronoLocalDate) doctorService.getDoctorAvailability(doctorId, appointmentDate))){
+                return 1;
+            }
+        }
+        if(!apptDoctorId.equals(doctorId)){
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public boolean validatePatient(Patient patient){
+        boolean valid = patientRepository.findByEmailOrPhone(patient.getEmail(), patient.getPhone()).getActive();
+        return valid;
+    }
+
+    public ResponseEntity<Map<String, String>> validatePatientLogin(Login login){
+        boolean valid = patientRepository.findByEmail(login.getEmail()).getActive();
+        if(valid){
+            tokenService.generateToken(login.getEmail());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+//    public ResponseEntity<Map<String, Object>> filterPatient(String condition, String name, String token){
+//        patientService.filterByDoctor("name", Doctor);
+//
+//        return ResponseEntity.ok().build();return ResponseEntity.ok().build();
+//
+//
+//    }
 }  //*******  END OF CLASS  *******************************
 
 

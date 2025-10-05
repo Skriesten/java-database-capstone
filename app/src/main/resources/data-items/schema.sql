@@ -50,7 +50,7 @@ CREATE TABLE appointment (
                              doctor_id INT NOT NULL,
                              patient_id INT NOT NULL,
                              status INT NOT NULL,
-                            reason_for_visit VARCHAR(200),
+                             condition VARCHAR(200),
                              FOREIGN KEY (doctor_id) REFERENCES doctor(id),
                              FOREIGN KEY (patient_id) REFERENCES patient(id)
 );

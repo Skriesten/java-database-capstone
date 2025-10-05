@@ -4,7 +4,6 @@ import com.project.back_end.models.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
@@ -23,6 +22,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     public List<Doctor> findBySpecialtyIgnoreCase(String specialty);
 
     List<Doctor> name(String name);
+
 } //  *******  END OF INTERFACE  **************************************
 // =================  INSTRUCTIONS  ===================================
    // 1. Extend JpaRepository:

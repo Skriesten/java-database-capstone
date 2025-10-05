@@ -1,7 +1,91 @@
 package com.project.back_end.services;
 
+import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Doctor;
+import com.project.back_end.models.Patient;
+import com.project.back_end.repo.AppointmentRepository;
+import com.project.back_end.repo.PatientRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+@Service
 public class PatientService {
-// 1. **Add @Service Annotation**:
+    private  PatientRepository patientRepository;
+    private AppointmentRepository appointmentRepository;
+    private TokenService tokenService;
+
+    public PatientService(PatientRepository patientRepository, AppointmentRepository appointmentRepository, TokenService tokenService) {
+        this.patientRepository = patientRepository;
+        this.appointmentRepository = appointmentRepository;
+        this.tokenService = tokenService;
+    }
+
+    public int createPatient(Patient patient){
+        patientRepository.save(patient);
+        try {
+            if (true) {
+                return 1;
+            }
+            else  {
+                return 0;
+            }
+        } catch (Exception e) {
+            e.getMessage();
+            return 0;
+        }
+    }
+
+    public ResponseEntity<Map<String, Object>> getPatientAppointment(Long id, String token) {
+        try {
+            Map<String, Object> response = new HashMap<>();
+            String tokenEmail = tokenService.extractEmail(token);
+            String patientEmail = String.valueOf(patientRepository.findByEmail(tokenEmail));
+            if (patientRepository.findByEmail(tokenEmail) != null) {
+                response.put("patient", patientRepository.findByEmail(tokenEmail));
+                return (ResponseEntity<Map<String, Object>>) response;
+            }
+        } catch (Exception e) {
+            e.getMessage();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+//    public  ResponseEntity<Map<String, Object>> filterByCondition(String condition, Long id){
+//           List<Appointment> apptId = appointmentRepository.findByPatientId(id);
+//        return ResponseEntity.ok().build();
+//    }
+
+    //Filters the patient's appointments by doctor's name
+    public ResponseEntity<Map<String, Object>> filterByDoctor(String name, Long patientId){
+      Map<String, Object> appts = (Map<String, Object>) appointmentRepository.filterByDoctorNameAndPatientId(name, patientId);
+         return (ResponseEntity<Map<String, Object>>) appts;
+    }
+
+//    public ResponseEntity<Map<String, Object>> filterByDoctorandCondition(String condition, String name, Long patientId){
+//        Optional<Patient> pId = patientRepository.findById(patientId);
+//        int status = 0;
+//        Map<String, Object> map = new HashMap<>();
+//        List<Appointment> appointmentList =  appointmentRepository.filterByDoctorNameAndPatientIdAndStatus(name, patientId, status);
+//        status = appointmentList.getFirst().getStatus();
+//        appointmentList.getFirst().getStatus();
+//        return ResponseEntity.ok().build();
+//    }
+
+    public ResponseEntity<Map<String, Object>> getPatientDetails(String token){
+        Map<String, Object> response = new HashMap<>();
+        tokenService.email.equalsIgnoreCase(token);
+
+        return ResponseEntity.ok().build();
+    }
+
+
+    // 1. **Add @Service Annotation**:
 //    - The `@Service` annotation is used to mark this class as a Spring service component. 
 //    - It will be managed by Spring's container and used for business logic related to patients and appointments.
 //    - Instruction: Ensure that the `@Service` annotation is applied above the class declaration.
@@ -52,7 +136,5 @@ public class PatientService {
 // 10. **Use of DTOs (Data Transfer Objects)**:
 //    - The service uses `AppointmentDTO` to transfer appointment-related data between layers. This ensures that sensitive or unnecessary data (e.g., password or private patient information) is not exposed in the response.
 //    - Instruction: Ensure that DTOs are used appropriately to limit the exposure of internal data and only send the relevant fields to the client.
-
-
 
 }
