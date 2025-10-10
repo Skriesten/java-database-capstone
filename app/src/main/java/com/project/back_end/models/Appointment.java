@@ -105,11 +105,11 @@ public class Appointment {
         this.status = status;
     }
 
-    public String getReason_for_visit() {
+    public String getCondition() {
         return condition;
     }
 
-    public void setReason_for_visit(String reason_for_visit) {
+    public void setCondition(String reason_for_visit) {
         this.condition = reason_for_visit;
     }
 

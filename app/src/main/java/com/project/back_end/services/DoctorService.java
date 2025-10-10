@@ -83,7 +83,6 @@ public class DoctorService {
             return 0;
         }
     };
-
     // #9
     public ResponseEntity<Map<String, String>> validateDoctor(Login login) {
             String email = login.getEmail();
@@ -96,14 +95,12 @@ public class DoctorService {
                 return ResponseEntity.badRequest().body(Map.of("Error message", "Doctor not found"));
             }
     };
-
     // #10
     @Transactional
     public Map<String, Object> findDoctorByName(String name){
         String doctor = doctorRepository.findByNameLike(name).toString();
            return Map.of("name", doctor);
     };
-
     // #11
     @Transactional
     public Map<String, Object> findDoctorByNameSpecialtyAndTime(String name, String specialty, String amOrPm) {
@@ -127,7 +124,6 @@ public class DoctorService {
               Doctor -> doctorList.contains(amOrPm)).toList();
         return filteredDoctorStream.toList();
     };
-
     // #13
     @Transactional
     public Map<String, Object> filterDoctorByNameAndTime(String name, String amOrPm){
@@ -135,19 +131,36 @@ public class DoctorService {
         doctorMap = findDoctorByName(name); // First find the doctor by name
         return doctorMap;
     }
-
     // #14
     @Transactional
-    public void filterDoctorByNameAndSpecialty(){};
-
+    public Map<String, Object> filterDoctorByNameAndSpecialty(String name, String specialty ){
+        Map<String, Object> doctorMap = new HashMap<>();
+        List<Doctor> doctorList = doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, specialty);
+        doctorMap = (Map<String, Object>) doctorMap.put("name", doctorList);
+        return doctorMap;
+    };
     //#15
     @Transactional
-    public void filterDoctorByTimeAndSpecialty(){};
-
+    public Map<String,Object> filterDoctorByTimeAndSpecialty(String specialty, String amOrPM){
+        Map<String, Object> doctorMap = new HashMap<>();
+        List<Doctor> doctorList = doctorRepository.findBySpecialtyIgnoreCase(specialty);
+        doctorMap = (Map<String, Object>) doctorMap.put("name", doctorList);
+        if(doctorMap.containsValue("AM")){
+            doctorMap.put("AM", amOrPM);
+        }
+        else {
+            doctorMap.put("PM", amOrPM);
+        }
+        return doctorMap;
+    };
     // #16
     @Transactional
-    public void filterDoctorBySpecialty(){};
-
+    public Map<String,Object> filterDoctorBySpecialty(String specialty){
+        Map<String, Object> doctorMap = new HashMap<>();
+        List<Doctor> doctorList = doctorRepository.findBySpecialtyIgnoreCase(specialty);
+        doctorMap = (Map<String, Object>) doctorMap.put("name", doctorList);
+        return doctorMap;
+    };
     // #17
     @Transactional
     public Map<String, Object> filterDoctorsByTime(String amOrPm){ // This is plural doctors
@@ -159,20 +172,21 @@ public class DoctorService {
     // #18
     @Transactional
     public List<Doctor> filterDoctorByTime(String amOrPm) {// This is singular doctor
-        ArrayList<Doctor> doctorList = new ArrayList<>();
-        boolean answer = true;
-        if(doctorList.getFirst().getAvailableTimes().contains("am")){
-            answer =true;
-            return doctorList;
+        List<Doctor> allDoctors = doctorRepository.findAll();
+        List<Doctor> filteredDoctors = filterDoctorByTime(amOrPm);
+        if (allDoctors == null || allDoctors.isEmpty()) {
+            return filteredDoctors; // Return an empty list if there are no doctors
         }
-        else if(doctorList.getFirst().getAvailableTimes().contains("pm")){
-            answer =true;
-            return doctorList;
+        // Loop through all doctors and apply the filter.
+        for (Doctor doctor : allDoctors) {
+            if (doctor.getAvailableTimes().contains(amOrPm)) {
+                filteredDoctors.add(doctor);
+            }
         }
-        else {
-            return doctorList;
-        }
+        //Return the new list of filtered doctors.
+        return filteredDoctors;
     }
+
 
         //  ============  INSTRUCTIONS  ==================================
 // 1. **Add @Service Annotation**:

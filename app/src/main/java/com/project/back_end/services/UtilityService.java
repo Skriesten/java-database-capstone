@@ -5,18 +5,21 @@ import com.project.back_end.models.Admin;
 import com.project.back_end.models.Appointment;
 import com.project.back_end.models.Patient;
 import com.project.back_end.repo.AdminRepository;
+import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 
+ // was having a conflict with the original file name of 'Service.java'
+ // renamed it "UtilityService"
  @Service
-public class Service {
-
+ public class UtilityService {
 
     private final TokenService tokenService;
     private final AdminRepository adminRepository;
@@ -24,16 +27,18 @@ public class Service {
     private final PatientRepository patientRepository;
     private final DoctorService doctorService;
     private final PatientService patientService;
+     private final AppointmentRepository appointmentRepository;
 
-    // general construct
-    public Service(TokenService tokenService, AdminRepository adminRepository, DoctorRepository doctorRepository,
-                   PatientRepository patientRepository, DoctorService doctorService, PatientService patientService) {
+     // general construct
+    public UtilityService(TokenService tokenService, AdminRepository adminRepository, DoctorRepository doctorRepository,
+                          PatientRepository patientRepository, DoctorService doctorService, PatientService patientService, AppointmentRepository appointmentRepository) {
         this.tokenService = tokenService;
         this.adminRepository = adminRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
         this.doctorService = doctorService;
         this.patientService = patientService;
+        this.appointmentRepository = appointmentRepository;
     }
 
     public ResponseEntity<Map<String, String>> validateToken(String user, String token) {
@@ -98,13 +103,23 @@ public class Service {
         }
     }
 
-//    public ResponseEntity<Map<String, Object>> filterPatient(String condition, String name, String token){
-//        patientService.filterByDoctor("name", Doctor);
+//    public ResponseEntity<Map<String, Object>> filterPatient(String condition, String doctorName, String token){
+//        boolean isPatient = tokenService.validateToken(token, "patient");
+//        String patientCondition = condition;
+//        String appDocotorName = doctorName;
+//        String patientToken = token;
+//        // look for only condition entered
+//        if(!patientCondition.isBlank() && appDocotorName.isBlank() && !isPatient){
+//            List<Appointment> appointmentList  = appointmentRepository.;
+//            patientService.filterByCondition(condition,patientId);
+//        }
 //
+//        patientRepository.getById();
+//
+//        patientService.filterByDoctor(doctorName);
+//        patientService.filterByDoctorandCondition(doctorName, condition);
 //        return ResponseEntity.ok().build();return ResponseEntity.ok().build();
-//
-//
-//    }
+  //  }
 }  //*******  END OF CLASS  *******************************
 
 

@@ -1,9 +1,9 @@
 package com.project.back_end.services;
 
 import com.project.back_end.models.Appointment;
-import com.project.back_end.models.Doctor;
 import com.project.back_end.models.Patient;
 import com.project.back_end.repo.AppointmentRepository;
+import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +12,19 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class PatientService {
+    private final DoctorRepository doctorRepository;
     private  PatientRepository patientRepository;
     private AppointmentRepository appointmentRepository;
     private TokenService tokenService;
 
-    public PatientService(PatientRepository patientRepository, AppointmentRepository appointmentRepository, TokenService tokenService) {
+    public PatientService(PatientRepository patientRepository, AppointmentRepository appointmentRepository, TokenService tokenService, DoctorRepository doctorRepository) {
         this.patientRepository = patientRepository;
         this.appointmentRepository = appointmentRepository;
         this.tokenService = tokenService;
+        this.doctorRepository = doctorRepository;
     }
 
     public int createPatient(Patient patient){
@@ -52,36 +53,71 @@ public class PatientService {
             }
         } catch (Exception e) {
             e.getMessage();
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    //Filters appointments by condition (past or future) for a specific patient
+    //Returns the filtered appointments or an error message
+    public  ResponseEntity<Map<String, Object>> filterByCondition(String condition, Long id){  // Patient's ID
+           Map<String, Object> response = new HashMap<>();
+        List<Appointment> apptId = appointmentRepository.findByPatientId(id);
+         if(apptId.isEmpty()) {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+         }
+         else {
+             for (Appointment appt : apptId) {
+                 appt.getCondition().equalsIgnoreCase(condition);
+                 response.put("appointment", appt);
+             }
+             return (ResponseEntity<Map<String, Object>>) response;
+         }
+    }
+
+    //Filters the patient's appointments by doctor's name
+    //Returns the filtered appointments or an error message
+    public ResponseEntity<Map<String, Object>> filterByDoctor(String doctorName, Long patientId){
+        Map<String, Object> appts = new HashMap<>();
+       List<Appointment> doctorList = appointmentRepository.filterByDoctorNameAndPatientId(doctorName, patientId);
+       if(doctorList.isEmpty()) {
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+       }
+       else {
+           for (Appointment appt : doctorList) {
+               appts.put("appointment", appt);
+           }
+           return (ResponseEntity<Map<String, Object>>) appts;
+       }
+    }
+
+    public ResponseEntity<Map<String, Object>> filterByDoctorandCondition(String condition, String doctorName){
+       Map<String, Object> map = new HashMap<>();
+       Long patientId = appointmentRepository.findAll().getLast().getId();
+       List<Appointment> appList = appointmentRepository.filterByDoctorNameAndPatientId(doctorName, patientId);
+        if(appList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        else {
+            for (Appointment appt : appList) {
+                appt.getCondition().equalsIgnoreCase(condition);
+                map.put("appointment", appt);
+            }
+            return (ResponseEntity<Map<String, Object>>) map;
         }
     }
 
-//    public  ResponseEntity<Map<String, Object>> filterByCondition(String condition, Long id){
-//           List<Appointment> apptId = appointmentRepository.findByPatientId(id);
-//        return ResponseEntity.ok().build();
-//    }
-
-    //Filters the patient's appointments by doctor's name
-    public ResponseEntity<Map<String, Object>> filterByDoctor(String name, Long patientId){
-      Map<String, Object> appts = (Map<String, Object>) appointmentRepository.filterByDoctorNameAndPatientId(name, patientId);
-         return (ResponseEntity<Map<String, Object>>) appts;
-    }
-
-//    public ResponseEntity<Map<String, Object>> filterByDoctorandCondition(String condition, String name, Long patientId){
-//        Optional<Patient> pId = patientRepository.findById(patientId);
-//        int status = 0;
-//        Map<String, Object> map = new HashMap<>();
-//        List<Appointment> appointmentList =  appointmentRepository.filterByDoctorNameAndPatientIdAndStatus(name, patientId, status);
-//        status = appointmentList.getFirst().getStatus();
-//        appointmentList.getFirst().getStatus();
-//        return ResponseEntity.ok().build();
-//    }
-
+    // Fetches the patient's details based on the provided JWT token
+    // Returns the patient's details or an error message
     public ResponseEntity<Map<String, Object>> getPatientDetails(String token){
         Map<String, Object> response = new HashMap<>();
-        tokenService.email.equalsIgnoreCase(token);
-
-        return ResponseEntity.ok().build();
+        String tokenEmail = tokenService.extractEmail(token);
+        List<Patient> id = patientRepository.findByEmail(tokenEmail).getPatient_id();
+        if(id.isEmpty()) {
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        else {
+           return (ResponseEntity<Map<String, Object>>) response.get(tokenEmail);
+        }
     }
 
 

@@ -1,7 +1,62 @@
 package com.project.back_end.services;
 
+import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Prescription;
+import com.project.back_end.repo.PrescriptionRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
 public class PrescriptionService {
-    
+    private PrescriptionRepository prescriptionRepository;
+
+    //Saves a prescription to the database
+    //Returns a response with a message indicating the result of the save operation
+    public ResponseEntity<Map<String, String>> savePrescription(PrescriptionRepository prescriptionRepository) {
+        Map<String, String> response = null;
+        try {
+            response = new HashMap<>();
+            List<Prescription> prescriptions = prescriptionRepository.findAll();
+            if (!prescriptions.isEmpty()) {
+                response.put("400 BAD REQUEST", "Prescription not saved");
+                return ResponseEntity.badRequest().body(response);
+            }
+            prescriptions.add(prescriptionRepository.save(new Prescription()));
+            response.put("201 CREATED", "Prescription saved");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("status","error");
+            response.put("message",e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    //Retrieves the prescription associated with a specific appointment ID
+    //Returns a response containing the prescription details or an error message
+    public ResponseEntity<Map<String, Object>> getPrescription(Long appointmentId) {
+        Map<String, Object> responseBody = new HashMap<>();
+        try {
+            List<Prescription> prescriptionList = prescriptionRepository.findByAppointmentId(appointmentId);
+            if (prescriptionList.isEmpty()) {
+                responseBody.put("Status", "Error");
+                return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
+            }
+                responseBody.put("200 OK ", prescriptionList);
+                return new ResponseEntity<>(responseBody, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            responseBody.put("status", "error");
+            responseBody.put("500 Internal Server Error", e.getMessage());
+            return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
+        }
+    }
+
  // 1. **Add @Service Annotation**:
 //    - The `@Service` annotation marks this class as a Spring service component, allowing Spring's container to manage it.
 //    - This class contains the business logic related to managing prescriptions in the healthcare system.
