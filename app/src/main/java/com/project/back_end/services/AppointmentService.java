@@ -1,6 +1,5 @@
 package com.project.back_end.services;
 
-import ch.qos.logback.core.subst.Token;
 import com.project.back_end.models.Appointment;
 import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.repo.DoctorRepository;
@@ -86,7 +85,7 @@ public class AppointmentService {
         }
 
         //  getAppointments method
-        public Map<String,Object> getAppointments(String pname, LocalDate startDate, LocalDate endDate, Token token){
+        public Map<String,Object> getAppointments(String pname, LocalDate startDate, LocalDate endDate, String token){
             Map<String,Object> apptMap = new HashMap<>();
             Appointment appointment = new Appointment();
             Long doctorId = appointment.getDoctor().getId();

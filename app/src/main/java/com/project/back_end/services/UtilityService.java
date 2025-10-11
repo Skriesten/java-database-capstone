@@ -1,3 +1,5 @@
+// Due to a conflict the IDE was having with the original file name of 'Service.java'
+// it was renamed as "UtilityService"
 package com.project.back_end.services;
 
 import com.project.back_end.DTO.Login;
@@ -8,6 +10,7 @@ import com.project.back_end.repo.AdminRepository;
 import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,8 +19,7 @@ import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 
- // was having a conflict with the original file name of 'Service.java'
- // renamed it "UtilityService"
+
  @Service
  public class UtilityService {
 
@@ -76,14 +78,14 @@ import java.util.*;
 
         if(apptDoctorId.equals(doctorId)){
             if(appointmentDate.isEqual((ChronoLocalDate) doctorService.getDoctorAvailability(doctorId, appointmentDate))){
-                return 1;
+                return 1; // appointment time is valid
             }
         }
         if(!apptDoctorId.equals(doctorId)){
-            return -1;
+            return -1;  // the doctor does not exist
         }
         else {
-            return 0;
+            return 0;   // the time is unavailable
         }
     }
 
@@ -113,9 +115,7 @@ import java.util.*;
 //            List<Appointment> appointmentList  = appointmentRepository.;
 //            patientService.filterByCondition(condition,patientId);
 //        }
-//
 //        patientRepository.getById();
-//
 //        patientService.filterByDoctor(doctorName);
 //        patientService.filterByDoctorandCondition(doctorName, condition);
 //        return ResponseEntity.ok().build();return ResponseEntity.ok().build();

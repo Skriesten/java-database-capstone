@@ -1,7 +1,111 @@
 package com.project.back_end.controllers;
 
 
+import com.project.back_end.models.Appointment;
+import com.project.back_end.services.AppointmentService;
+import com.project.back_end.services.UtilityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.LongToDoubleFunction;
+
+@RestController
+@RequestMapping("/appointments/")
 public class AppointmentController {
+    @Autowired
+    private AppointmentService appointmentService;
+    @Autowired
+    private UtilityService utilityService;
+
+
+    @GetMapping("(/{date}/{patientName}/{token})")
+    public ResponseEntity<Map<String, Object>> getAppointments(@PathVariable LocalDate date,
+                                 @PathVariable String patientName, @PathVariable String token){
+        Map<String,Object> map = new HashMap<>();
+        boolean isValid = utilityService.validateToken("doctor", token).hasBody();
+        if(!isValid){
+            map.put("message", "Token invalid");
+            return (ResponseEntity<Map<String, Object>>) map;
+        }
+        else {
+            LocalDate startDate = date.minusDays(1);
+            LocalDate endDate = date.plusDays(1);
+           map = appointmentService.getAppointments(patientName,startDate, endDate, token );
+           return ResponseEntity.ok(map);
+        }
+    }
+
+    @PostMapping("/{token}")
+    public ResponseEntity<Map<String, String>> bookAppointment(Appointment appointment, @PathVariable String token){
+        boolean isValid = utilityService.validateToken("patient", token).hasBody();
+        int apptStatus = utilityService.validateAppointment(appointment);
+        // return 1;  appointment time is valid
+        // return -1;  // the doctor does not exist
+        // return 0;   // the time is unavailable
+
+        Map<String,String> map = new HashMap<>();
+        if(!isValid){
+            map.put("message", "Patient is invalid");
+            return (ResponseEntity<Map<String, String>>) map;
+            }
+            else if(apptStatus == -1) {  // the doctor does not exist
+                map.put("message", "Appointment is invalid, doctor not valid");
+                return (ResponseEntity<Map<String, String>>) map;
+            }
+            else if(apptStatus == 0){ // the time is unavailable
+                map.put("message", "Appointment time is not available");
+                return (ResponseEntity<Map<String, String>>) map;
+            }
+            else if(apptStatus == 1) {  //appointment time is valid
+                appointmentService.bookAppointment(appointment);
+                map.put("message", "Appointment time is available, appointment has been made.");
+                map.put("message", "HTTP Status 201 Created");
+        }
+            return ResponseEntity.status(HttpStatus.CREATED).body(map);
+    }
+
+    @PostMapping("/{token}")
+    public ResponseEntity<Map<String, String>> updateAppointment(Appointment appointment, @PathVariable String token){
+        Map<String,String> map = new HashMap<>();
+        boolean isValid = utilityService.validateToken("patient", token).hasBody();
+        if(!isValid){
+            map.put("message", "Patient is invalid, appointment not updated");
+            return (ResponseEntity<Map<String, String>>) map;
+        }
+        else{
+            appointmentService.updateAppointment(appointment);
+            map.put("message", "Appointment has been updated");
+            map.put("message", "HTTP Status 201 Created");
+            return (ResponseEntity<Map<String, String>>) map;
+        }
+    }
+
+    @DeleteMapping("/{id}/{token}")
+    public ResponseEntity<Map<String, String>> cancelAppointment(@PathVariable Long appointmentId, @PathVariable String token){
+        Appointment appointment = new Appointment();
+        appointment.setId(appointmentId);
+        Map<String,String> map = new HashMap<>();
+        boolean isValid = utilityService.validateToken("patient", token).hasBody();
+        if(!isValid){
+            map.put("message", "Patient is invalid, appointment not cancelled");
+            return (ResponseEntity<Map<String, String>>) map;
+        }
+        else{
+            appointmentService.cancelAppointment(appointment);
+            map.put("message", "Appointment has been cancelled");
+            map.put("message", "HTTP Status 200 Deleted");
+            return (ResponseEntity<Map<String, String>>) map;
+        }
+    }
+
+}
 
 // 1. Set Up the Controller Class:
 //    - Annotate the class with `@RestController` to define it as a REST API controller.
@@ -43,6 +147,3 @@ public class AppointmentController {
 //    - Accepts the appointment ID and a token as path variables.
 //    - Validates the token for `"patient"` role to ensure the user is authorized to cancel the appointment.
 //    - Calls `AppointmentService` to handle the cancellation process and returns the result.
-
-
-}

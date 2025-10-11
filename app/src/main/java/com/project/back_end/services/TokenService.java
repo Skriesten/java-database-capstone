@@ -1,13 +1,13 @@
 package com.project.back_end.services;
 
 import com.project.back_end.repo.AdminRepository;
+import com.project.back_end.repo.DoctorRepository;
+import com.project.back_end.repo.PatientRepository;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -17,55 +17,63 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static io.jsonwebtoken.security.SignatureAlgorithm.*;
-
 @Component
 public class TokenService {
     String email;
-    @Autowired
+
+    private AdminRepository adminRepository;
+    private DoctorRepository doctorRepository;
+    private PatientRepository patientRepository;
     private  SecretKey signingKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(System.getenv("PUBLIC_KEY")));
-    @Autowired
-    AdminRepository repo;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    // Constructor
-    public TokenService(SecretKey signingKey) { this.signingKey = signingKey;}
+    public TokenService(AdminRepository adminRepository, DoctorRepository doctorRepository,
+                 PatientRepository patientRepository, SecretKey signingKey) {
+        this.adminRepository = adminRepository;
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
+        this.signingKey = signingKey;
+    }
+
+    public TokenService() {}
+
+    public TokenService(SecretKey signingKey) {}
+
 
     @DependsOn
-    public SecretKey getSigningKey(String token){
+    public SecretKey getSigningKey(SecretKey signingKey){
             byte[] keyBytes = this.jwtSecret.getBytes(StandardCharsets.UTF_8);
             return  Keys.hmacShaKeyFor(keyBytes);
         }
 
-        @DependsOn
-        public JwtBuilder generateToken(String role){
-            Date issuedAt = new Date();
-            // Set the expiration date for 7 days from now
-            long expirationTimeMillis = issuedAt.getTime() + TimeUnit.DAYS.toDays(7);
-            Date expiration = new Date(expirationTimeMillis);
-            // Build the JWT token
-            return Jwts.builder()
-                  .setSubject(email)
-                  .setIssuedAt(issuedAt)
-                  .setExpiration(expiration)
-                 .signWith(getSigningKey(String.valueOf(signingKey)));
-
+    @DependsOn
+    public JwtBuilder generateToken(String userName){
+        Date issuedAt = new Date();
+        // Set the expiration date for 7 days from now
+        long expirationTimeMillis = issuedAt.getTime() + TimeUnit.DAYS.toDays(7);
+        Date expiration = new Date(expirationTimeMillis);
+        // Build the JWT token
+        return Jwts.builder()
+              .setSubject(email)
+              .setIssuedAt(issuedAt)
+              .setExpiration(expiration)
+             .signWith(getSigningKey(signingKey));
     }
 
     public String extractEmail(String token){
-      // if(getSigningKey(token)) {
-
-           String email;
-           return token;
+      TokenService tokenservice = new TokenService(signingKey);
+      String extractedEmail = tokenservice.extractEmail(token);
+      return Jwts.parser()
+            .build()
+            .parseClaimsJws(extractedEmail)
+            .getBody()
+            .getSubject();
        }
-
-
 
     public  boolean validateToken(String token, String role){
        String tokenRole = role; // =  extractEmail(token);
-
         if(tokenRole.equalsIgnoreCase(role) && role.equalsIgnoreCase("admin")){
                 return true;
             }else if(tokenRole.equalsIgnoreCase(role) &&role.equalsIgnoreCase("doctor")){

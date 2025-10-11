@@ -3,10 +3,12 @@ package com.project.back_end.controllers;
 
 import com.project.back_end.models.Admin;
 import com.project.back_end.repo.AdminRepository;
+import com.project.back_end.services.UtilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,10 +16,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("${api.path}admin")
+@RequestMapping("${api.path}" + "admin")
 public class AdminController {
-    private  AdminRepository adminRepository;
- //   @Autowired
+    @Autowired
+    private UtilityService service;
+
+    public AdminController(UtilityService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public ResponseEntity<Map<String,String>> adminLogin(@RequestBody Admin admin) {
+        Map<String,String> map = new HashMap<>();
+       map = service.validateAdmin(admin.getUserName(), admin.getPassword()).getBody();
+        return (ResponseEntity<Map<String, String>>) map;
+    }
 
 // 2. Autowire Service Dependency:
 //    - Use constructor injection to autowire the `Service` class.
