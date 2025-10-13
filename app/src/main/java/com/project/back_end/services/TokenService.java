@@ -5,15 +5,17 @@ import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.io.FileInputStream;
+import java.security.KeyStore;
+import java.security.PrivateKey;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -21,35 +23,35 @@ import java.util.concurrent.TimeUnit;
 public class TokenService {
     String email;
 
-    private AdminRepository adminRepository;
-    private DoctorRepository doctorRepository;
-    private PatientRepository patientRepository;
-    private  SecretKey signingKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(System.getenv("PUBLIC_KEY")));
+    private  AdminRepository adminRepository;
+    private  DoctorRepository doctorRepository;
+    private  PatientRepository patientRepository;
+   // private  SecretKey signingKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(System.getenv("PUBLIC_KEY")));
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+   //@Value("${jwt.secret}")
+  // @Value("${application.jwt.secret}")  // obtained from google AI
+  private String jwtSecret;
 
-    public TokenService(AdminRepository adminRepository, DoctorRepository doctorRepository,
-                 PatientRepository patientRepository, SecretKey signingKey) {
+    public TokenService() {
+    }
+
+    public TokenService(AdminRepository adminRepository,
+                        DoctorRepository doctorRepository,
+                        PatientRepository patientRepository) {
         this.adminRepository = adminRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
-        this.signingKey = signingKey;
     }
 
-    public TokenService() {}
+    public TokenService(AdminRepository signingKey) {
+    }
 
-    public TokenService(SecretKey signingKey) {}
-
-
-    @DependsOn
-    public SecretKey getSigningKey(SecretKey signingKey){
-            byte[] keyBytes = this.jwtSecret.getBytes(StandardCharsets.UTF_8);
-            return  Keys.hmacShaKeyFor(keyBytes);
-        }
+    public SecretKey getSigningKey(){
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
 
     @DependsOn
-    public JwtBuilder generateToken(String userName){
+    public JwtBuilder generateToken(String userName) throws Exception {
         Date issuedAt = new Date();
         // Set the expiration date for 7 days from now
         long expirationTimeMillis = issuedAt.getTime() + TimeUnit.DAYS.toDays(7);
@@ -59,11 +61,12 @@ public class TokenService {
               .setSubject(email)
               .setIssuedAt(issuedAt)
               .setExpiration(expiration)
-             .signWith(getSigningKey(signingKey));
+             .signWith(getSigningKey());
     }
 
     public String extractEmail(String token){
-      TokenService tokenservice = new TokenService(signingKey);
+        AdminRepository signingKey = null;
+        TokenService tokenservice = new TokenService(signingKey);
       String extractedEmail = tokenservice.extractEmail(token);
       return Jwts.parser()
             .build()
@@ -76,15 +79,14 @@ public class TokenService {
        String tokenRole = role; // =  extractEmail(token);
         if(tokenRole.equalsIgnoreCase(role) && role.equalsIgnoreCase("admin")){
                 return true;
-            }else if(tokenRole.equalsIgnoreCase(role) &&role.equalsIgnoreCase("doctor")){
+            }else if(tokenRole.equalsIgnoreCase(role) && role.equalsIgnoreCase("doctor")){
                 return true;
-            } else if(tokenRole.equalsIgnoreCase(role) &&role.equalsIgnoreCase("patient")){
+            } else if(tokenRole.equalsIgnoreCase(role) && role.equalsIgnoreCase("patient")){
                 return true;
             } else {
                 return false;
             }
     }
-
 }
 /*  ****  INSTRUCTIONS ************************************    
  1. **@Component Annotation**

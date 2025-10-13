@@ -1,6 +1,107 @@
 package com.project.back_end.controllers;
 
+import com.project.back_end.DTO.Login;
+import com.project.back_end.models.Patient;
+import com.project.back_end.services.PatientService;
+import com.project.back_end.services.UtilityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/patient")
 public class PatientController {
+    @Autowired
+    private PatientService patientService;
+    @Autowired
+    private UtilityService utilityService;
+
+    @GetMapping("/{token}")
+    public ResponseEntity<Map<String, String>> getPatient(@PathVariable String token) {
+        Map<String,String> response = new HashMap<>();
+        boolean isValid = utilityService.validateToken("patient", token).hasBody();
+        if(!isValid) {
+            response.put("message", "Invalid Token");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        else {
+            response = (Map<String, String>) patientService.getPatientDetails(token);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> savePatient(@RequestBody Patient patient) {
+        Map<String,Object> response = new HashMap<>();
+        boolean isValid = utilityService.validatePatient(patient);
+        if(!isValid) {
+            response.put("message", "Patient with email, id or phone number already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        else if(isValid) {
+            patientService.createPatient(patient);
+            response.put("message", "Patient created successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
+        else {
+            response.put("message", "Internal Server Error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/{id}/{token}")
+    public ResponseEntity<Map<String, Object>> patientLogin(@RequestBody Login login) throws Exception {
+        Map<String,Object> response = new HashMap<>();
+        response = (Map<String, Object>) utilityService.validatePatientLogin(login);
+        if(response.isEmpty()){
+            response.put("message", "Invalid Login");
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        else {
+            response.put("message", "Patient Login successful");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+
+    @GetMapping("/{id}/{token}")
+    public ResponseEntity<Map<String, Object>> getPatientAppointments(@PathVariable Long id, @PathVariable String token) {
+        Map<String,Object> response = new HashMap<>();
+        boolean isValid = utilityService.validateToken("patient", token).hasBody();
+        if(!isValid) {
+            response.put("message", "Invalid Token");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        else if(isValid) {
+            patientService.getPatientAppointment(id, token);
+            response.put("message", "Patient appointment successful");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        else {
+            response.put("message", "Internal Server Error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
+//    @GetMapping("/filter/{condition}/{name}/{token}")
+//    public ResponseEntity<Map<String, Object>> filterPatientAppointments(@PathVariable String condition, @PathVariable String name, @PathVariable String token) {
+//        Map<String,Object> response = new HashMap<>();
+//        boolean isValid = utilityService.validateToken("patient", token).hasBody();
+//        if(!isValid) {
+//            response.put("message", "Invalid Token");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+//        }
+//        else if(isValid) {
+//            utilityService.filterPatient();
+//        }
+//    }
+
+
 
 // 1. Set Up the Controller Class:
 //    - Annotate the class with `@RestController` to define it as a REST API controller for patient-related operations.

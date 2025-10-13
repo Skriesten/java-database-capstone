@@ -53,7 +53,7 @@ import java.util.*;
       }
     }
 
-    public ResponseEntity<Map<String, String>>  validateAdmin(String username, String password) {
+    public ResponseEntity<Map<String, String>>  validateAdmin(String username, String password) throws Exception {
         Admin admin = adminRepository.findByUsername(username);
            if(admin.getPassword().equals(password)) {
                tokenService.generateToken(username);
@@ -75,7 +75,6 @@ import java.util.*;
         Long apptDoctorId = appointment.getDoctor().getId();
         Long doctorId = doctorRepository.getReferenceById(apptDoctorId).getId();
         LocalDate appointmentDate= appointment.getAppointmentDate();
-
         if(apptDoctorId.equals(doctorId)){
             if(appointmentDate.isEqual((ChronoLocalDate) doctorService.getDoctorAvailability(doctorId, appointmentDate))){
                 return 1; // appointment time is valid
@@ -94,7 +93,7 @@ import java.util.*;
         return valid;
     }
 
-    public ResponseEntity<Map<String, String>> validatePatientLogin(Login login){
+    public ResponseEntity<Map<String, String>> validatePatientLogin(Login login) throws Exception {
         boolean valid = patientRepository.findByEmail(login.getEmail()).getActive();
         if(valid){
             tokenService.generateToken(login.getEmail());
@@ -107,19 +106,19 @@ import java.util.*;
 
 //    public ResponseEntity<Map<String, Object>> filterPatient(String condition, String doctorName, String token){
 //        boolean isPatient = tokenService.validateToken(token, "patient");
-//        String patientCondition = condition;
-//        String appDocotorName = doctorName;
-//        String patientToken = token;
+//        Long doctorId = doctorRepository.findByNameLike(doctorName).getFirst().getId();
+//        Long patientId = appointmentRepository.con
 //        // look for only condition entered
-//        if(!patientCondition.isBlank() && appDocotorName.isBlank() && !isPatient){
-//            List<Appointment> appointmentList  = appointmentRepository.;
+//       tokenService.
+//        if(!condition.isBlank() && doctorName.isBlank() && !isPatient){
+//            List<Appointment> appointmentList  = patientService.filterByCondition(condition,)
 //            patientService.filterByCondition(condition,patientId);
 //        }
 //        patientRepository.getById();
 //        patientService.filterByDoctor(doctorName);
 //        patientService.filterByDoctorandCondition(doctorName, condition);
 //        return ResponseEntity.ok().build();return ResponseEntity.ok().build();
-  //  }
+//    }
 }  //*******  END OF CLASS  *******************************
 
 

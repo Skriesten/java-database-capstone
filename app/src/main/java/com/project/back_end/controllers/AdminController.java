@@ -26,24 +26,23 @@ public class AdminController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> adminLogin(@RequestBody Admin admin) {
+    public ResponseEntity<Map<String,String>> adminLogin(@RequestBody Admin admin) throws Exception {
         Map<String,String> map = new HashMap<>();
        map = service.validateAdmin(admin.getUserName(), admin.getPassword()).getBody();
-        return (ResponseEntity<Map<String, String>>) map;
+       if(!map.containsKey("error")){
+           map.put("status","success");
+           return new ResponseEntity<>(map,HttpStatus.OK);
+       }
+       else {
+           map.put("status", "error");
+           return ResponseEntity.badRequest().body(map);
+       }
     }
 
 // 2. Autowire Service Dependency:
 //    - Use constructor injection to autowire the `Service` class.
 //    - The service handles core logic related to admin validation and token checking.
 //    - This promotes cleaner code and separation of concerns between the controller and business logic layer.
-
-//    @PostMapping
-//    public ResponseEntity<Map<String, Object >> adminLogin(Admin admin){
-//        Map<String,Object> map = new HashMap<>();
-//        map =   map.put("admin",admin);
-//        validateAdmin(admin.getUserName());
-//        return new ResponseEntity<>(map, HttpStatus.OK);
-//    }
 
 // 3. Define the `adminLogin` Method:
 //    - Handles HTTP POST requests for admin login functionality.

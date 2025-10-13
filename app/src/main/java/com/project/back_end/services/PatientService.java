@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,20 +90,21 @@ public class PatientService {
            return (ResponseEntity<Map<String, Object>>) appts;
        }
     }
-
-    public ResponseEntity<Map<String, Object>> filterByDoctorandCondition(String condition, String doctorName){
-       Map<String, Object> map = new HashMap<>();
-       Long patientId = appointmentRepository.findAll().getLast().getId();
-       List<Appointment> appList = appointmentRepository.filterByDoctorNameAndPatientId(doctorName, patientId);
-        if(appList.isEmpty()) {
+    // Filters appointments based on both the doctor's name and the condition (past or future) for a specific patient.
+    public ResponseEntity<Map<String, Object>> filterByDoctorandCondition(String condition, String doctorName, Long patientId){
+        Map<String, Object> response = new HashMap<>();
+       List<Appointment> apptList = new ArrayList<>();
+       apptList = appointmentRepository.filterByDoctorNameAndPatientId(doctorName, patientId);
+       List<Appointment> filteredList = appointmentRepository.findByCondition(condition);
+        if(filteredList.isEmpty()) {
+            response.put("appointmentList", apptList);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         else {
-            for (Appointment appt : appList) {
-                appt.getCondition().equalsIgnoreCase(condition);
-                map.put("appointment", appt);
+            for (Appointment appt : filteredList) {
+                response.put("appointment", appt);
             }
-            return (ResponseEntity<Map<String, Object>>) map;
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
 

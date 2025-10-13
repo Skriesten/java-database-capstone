@@ -1,6 +1,7 @@
 package com.project.back_end.repo;
 
 import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -51,11 +52,17 @@ public interface AppointmentRepository  extends JpaRepository<Appointment,Long> 
     public List<Appointment> filterByDoctorNameAndPatientIdAndStatus(String doctorName, Long patientId, int status);
     //findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween
 
+    @Query("select a from Appointment a "
+            + " where a.id = :id")
+    public List<Appointment> findAppointmentById(Appointment appointment);
 
     @Modifying
     @Transactional
-    public void updateStatus(int status, Long id);
+    public void updateStatus(int status, List<Patient> id);
 
+    @Query("select a from Appointment a "
+            + " where a.condition = :condition")
+    public List<Appointment> findByCondition(String condition);
 
 // =========  INSTRUCTIONS  =========================================
    // 1. Extend JpaRepository:

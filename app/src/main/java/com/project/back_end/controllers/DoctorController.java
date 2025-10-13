@@ -1,19 +1,145 @@
 package com.project.back_end.controllers;
 
+import com.project.back_end.DTO.Login;
+import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Doctor;
+import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.services.DoctorService;
+import com.project.back_end.services.UtilityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("${api.path}doctor")
+@RequestMapping("${api.path}" + "doctor")
 public class DoctorController {
+    @Autowired
+    private DoctorService doctorService;
+    @Autowired
+    private UtilityService utilityService;
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
+    @GetMapping("/availability/{role}/{doctorId}/{date}/{token}")
+    public ResponseEntity<Map<String, String>> getDoctorAvailability(
+          @PathVariable String role,
+          @PathVariable Long doctorId,
+          @PathVariable LocalDate date,
+          @PathVariable String token) {
+        Map<String, String> response = new HashMap<>();
+        boolean isValid = utilityService.validateToken("Doctor", token).hasBody();
+        Appointment appointment = new Appointment();
+        int apptValid = utilityService.validateAppointment(appointment);
+        if (!isValid) {
+            response.put("message", "Doctor is not listed.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } else if (apptValid == -1) {
+            response.put("message", "Doctor is not listed.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } else if (apptValid == 0) {
+            response.put("message", "Time is not available.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } else if (apptValid == 1) {
+            doctorService.getDoctorAvailability(doctorId, date);
+            response.put("message", "Time is available.");
+            return ResponseEntity.status(HttpStatus.FOUND).body(response);
+        }
+        else {
+            return null;
+        }
+
+    }
+
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getDoctor(){
+        Map<String, Object> response = new HashMap<>();
+        List<Doctor> doctors = doctorService.getDoctors();
+        response.put("doctors", doctors);
+        return (ResponseEntity<Map<String, Object>>) ResponseEntity.status(HttpStatus.OK).body(response) ;
+    }
+
+    @PostMapping("/{token}")
+    public ResponseEntity<Map<String , Object>> addDoctor(@PathVariable String token, @RequestBody Doctor doctor){
+        Map<String , Object> response = new HashMap<>();
+        boolean isValid =  utilityService.validateToken("Doctor", token).hasBody();
+        if(!isValid){
+            response.put("message", "Doctor already exists.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        else if(isValid){
+            doctorService.saveDoctor(doctor);
+            response.put("message", "Doctor added to db.");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        else{
+            response.put("message", "Some internal error occurred.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/login")
+    public Map<String, String> doctorLogin(@PathVariable Login login) throws Exception {
+        Map<String,String> response = new HashMap<>();
+        response = doctorService.validateDoctor(login).getBody();
+        return response;
+    }
+
+    @PutMapping("/{token}")
+    public Map<String, String> updateDoctor(@PathVariable String token, @RequestBody Doctor doctor){
+        Map<String,String> response = new HashMap<>();
+        boolean isValid = utilityService.validateToken("Admin", token).hasBody();
+        if(!isValid) {
+            response.put("message", "Doctor not found.");
+            return response;
+        }
+        else if(isValid){
+            doctorService.updateDoctor(doctor);
+            response.put("message", "Doctor updated.");
+            return response;
+        }
+        else {
+            response.put("message", "Some internal error occurred.");
+            return response;
+        }
+    }
+
+
+    @DeleteMapping("/{id}/{token}")
+    public ResponseEntity<Map<String, String>> deleteDoctor(@PathVariable Long doctorId, @PathVariable String token){
+        Map<String,String> response = new HashMap<>();
+        boolean isValid = utilityService.validateToken("Doctor", token).hasBody();
+        if(!isValid) {
+            response.put("message", "Doctor not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        else if(isValid){
+            doctorService.deleteDoctor(doctorId);
+            response.put("message", "Doctor deleted.");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        else {
+            response.put("message", "Some internal error occurred.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/filter/{name}/{time}/{speciality}")
+    public Map<String, Object> filterDoctors(@PathVariable String doctorName, @PathVariable LocalDateTime time, @PathVariable String specialty){
+        Map<String,Object> response = new HashMap<>();
+        response = utilityService.filterDoctor(doctorName, specialty, String.valueOf(time));
+        return response;
+    }
+
+    // return 1;  appointment time is valid
+    // return -1;  // the doctor does not exist
+    // return 0;   // the time is unavailable
 //  ***** INSTRUCTIONS
 // 1. Set Up the Controller Class:
 //    - Annotate the class with `@RestController` to define it as a REST controller that serves JSON responses.

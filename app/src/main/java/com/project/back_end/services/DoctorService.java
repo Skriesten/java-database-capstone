@@ -84,7 +84,7 @@ public class DoctorService {
         }
     };
     // #9
-    public ResponseEntity<Map<String, String>> validateDoctor(Login login) {
+    public ResponseEntity<Map<String, String>> validateDoctor(Login login) throws Exception {
             String email = login.getEmail();
             String token;
             if(doctorRepository.findbyEmail(email).getActive()) {

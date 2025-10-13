@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface AdminRepository extends JpaRepository<Admin,Long> {  // Repo Class
 
     // Extract email method
-    public String extractEmail(String token);
+public String extractEmail(String token);
 
     // findbyUserName method
 public Admin findByUsername(String userName);

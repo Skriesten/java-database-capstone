@@ -1,10 +1,12 @@
 package com.project.back_end.services;
 
 import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Patient;
 import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,78 +40,60 @@ public class AppointmentService {
         }
     }
 
-        // needs work still
-        @Transactional
-        public ResponseEntity<Map<String, String>> updateAppointment(Appointment appointment){
-            HttpHeaders headers = new HttpHeaders();
-            Map<String, String> map = new HashMap<>();
-            Long apptId = appointment.getId();
-            Long patientId = appointment.getPatient().getId();
+    @Transactional
+    public ResponseEntity<Map<String, String>> updateAppointment(Appointment appointment) {
+        boolean result = patientRepository.getReferenceById(appointment.getPatient().getId()).getActive();
+        Map<String, String> response = new HashMap<>();
 
-            appointmentRepository.findById(appointment.getId());
+        if (result) {
             appointmentRepository.save(appointment);
-            int result = appointment.getStatus();
-            return ResponseEntity.ok(map);
-
-
-
-            //    - This method is used to update an existing appointment based on its ID.
-//    - It validates whether the patient ID matches, checks if the appointment
-//          is available for updating, and ensures that the doctor is available at
-//           the specified time.
-//    - If the update is successful, it saves the appointment; otherwise, it returns
-//          an appropriate error message.
-//    - Instruction: Ensure proper validation and error handling is included
-//           for appointment updates.
-            //   This method is used to modify an existing appointment, making sure
-            //   to validate the data before saving it. It handles different error
-            //   responses based on the type of issue (for example, invalid doctor ID,
-            //   appointment already booked, and so on).
-
-            //        HttpHeaders responseHeaders = new HttpHeaders();
-            //        responseHeaders.set("My-Custom-Header", "My-Custom-Value");
-            //        return new ResponseEntity<>(activityRepository.findAll(), responseHeaders, HttpStatus.OK);
-
-            //      or HttpHeaders headers = new HttpHeaders();
-            //      headers.add("info", "the record was saved");
-            //      or in the case of errors
-            //      headers.add("record-error:", "invalid "Doctor Id" or "appointment already booked", etc.
+            response.put("status", "success");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        else {
+            response.put("status", "error - patient ID ddoesn't match");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
-            // concelAppointment method
-        @Transactional
-        public void cancelAppointment(Appointment appointment){
-           int  result = appointment.getStatus();
-            if(result == 1){
-                 appointmentRepository.deleteById(appointment.getId());
-            }
-        }
 
-        //  getAppointments method
-        public Map<String,Object> getAppointments(String pname, LocalDate startDate, LocalDate endDate, String token){
-            Map<String,Object> apptMap = new HashMap<>();
-            Appointment appointment = new Appointment();
-            Long doctorId = appointment.getDoctor().getId();
-            LocalDate sDate = startDate;
-            LocalDate eDate = endDate;
-            String patientName = pname;
-            boolean tokenOk = tokenService.validateToken(String.valueOf(token), appointment.getDoctor().getRole());
-           if(!pname.isBlank() && tokenOk){
-               return (Map<String, Object>) appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(doctorId, patientName, sDate.atStartOfDay(), eDate.atStartOfDay());
-           }
-           return apptMap;
-        }
 
-        //  changeStatus method
-        @Transactional
-        public void changeStatus(Appointment appointment){
-            // change the number of the status to 0
-            int result = appointment.getStatus();
-            Long apptId = appointment.getId();
-            appointmentRepository.updateStatus(result, apptId);  // Update the status
-            appointmentRepository.save(appointment); // save appointment
+    @Transactional
+    public void cancelAppointment(Appointment appointment) {
+        int result = appointment.getStatus();
+        if (result == 1) {
+            appointmentRepository.deleteById(appointment.getId());
         }
-}
+    }
 
+    //  getAppointments method
+    public Map<String, Object> getAppointments(String pname, LocalDate startDate, LocalDate endDate, String token) {
+        Map<String, Object> apptMap = new HashMap<>();
+        Appointment appointment = new Appointment();
+        Long doctorId = appointment.getDoctor().getId();
+        LocalDate sDate = startDate;
+        LocalDate eDate = endDate;
+        String patientName = pname;
+        boolean tokenOk = tokenService.validateToken(String.valueOf(token), appointment.getDoctor().getRole());
+        if (!pname.isBlank() && tokenOk) {
+            return (Map<String, Object>) appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(doctorId, patientName, sDate.atStartOfDay(), eDate.atStartOfDay());
+        }
+        return apptMap;
+    }
+
+    //  changeStatus method
+//    @Transactional
+//    public void changeStatus(int status, Appointment appointment) {
+//        // change the number of the status to 0
+//        Long doctorId = appointment.getDoctor().getId();
+//        int result = appointment.getStatus();
+//        int newStatus = 0;
+//        List<Appointment> apptList = appointmentRepository.findByPatientId(doctorId);
+//        List<Patient> apptId = apptList.sd   .getFirst().getPatient().getPatient_id();
+//        appointmentRepository.updateStatus(result, apptId);  // Update the status
+//        appointmentRepository.save(appointment); // save appointment
+//    }
+
+}  // END OF CLASS BRACKET
 
 
     // 1. **Add @Service Annotation**:

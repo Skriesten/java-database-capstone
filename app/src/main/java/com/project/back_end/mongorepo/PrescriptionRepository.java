@@ -1,8 +1,7 @@
-package com.project.back_end.repo;
+package com.project.back_end.mongorepo;
 
 import com.project.back_end.models.Prescription;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
