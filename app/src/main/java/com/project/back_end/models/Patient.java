@@ -62,8 +62,17 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private Collection<Appointment> appointment;
 
-    @OneToMany(mappedBy = "patient")
-    private List<Patient>  patient_id;
+//   This was creating an error due to no matching patient field
+//   the corrected code is below
+//    @OneToMany(mappedBy = "patient")
+//    private List<Patient>  patient_id;
+
+    @OneToMany(mappedBy = "primaryPatient")
+    private List<Patient> dependents;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "primary_patient_id")
+    private Patient primaryPatient;
 
     @OneToMany(mappedBy = "patient")
     private Collection<Patient_Record>  patientRecords;
@@ -126,13 +135,14 @@ public class Patient {
         this.appointment = appointment;
     }
 
-    public List<Patient> getPatient_id() {
-        return patient_id;
-    }
-
-    public void setPatient_id(List<Patient> patient_id) {
-        this.patient_id = patient_id;
-    }
+//   Old text that was part of what was creating an error
+//    public List<Patient> getPatient_id() {
+//        return patient_id;
+//    }
+//
+//    public void setPatient_id(List<Patient> patient_id) {
+//        this.patient_id = patient_id;
+//    }
 
     public String getUserName() {
         return user_name;
@@ -180,6 +190,22 @@ public class Patient {
 
     public void setEmergency_contact(String emergency_contact) {
         this.emergency_contact = emergency_contact;
+    }
+
+    public List<Patient> getDependents() {
+        return dependents;
+    }
+
+    public void setDependents(List<Patient> dependents) {
+        this.dependents = dependents;
+    }
+
+    public Patient getPrimaryPatient() {
+        return primaryPatient;
+    }
+
+    public void setPrimaryPatient(Patient primaryPatient) {
+        this.primaryPatient = primaryPatient;
     }
 
     public Boolean getActive() {

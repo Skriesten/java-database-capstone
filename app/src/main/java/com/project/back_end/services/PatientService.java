@@ -113,7 +113,7 @@ public class PatientService {
     public ResponseEntity<Map<String, Object>> getPatientDetails(String token){
         Map<String, Object> response = new HashMap<>();
         String tokenEmail = tokenService.extractEmail(token);
-        List<Patient> id = patientRepository.findByEmail(tokenEmail).getPatient_id();
+        List<Patient> id = patientRepository.findByEmail(tokenEmail).getDependents();
         if(id.isEmpty()) {
            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

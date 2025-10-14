@@ -53,8 +53,8 @@ public class PatientController {
         }
     }
 
-    @GetMapping("/{id}/{token}")
-    public ResponseEntity<Map<String, Object>> patientLogin(@RequestBody Login login) throws Exception {
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Login login) throws Exception {
         Map<String,Object> response = new HashMap<>();
         response = (Map<String, Object>) utilityService.validatePatientLogin(login);
         if(response.isEmpty()){
@@ -128,7 +128,7 @@ public class PatientController {
 
 // 5. Define the `login` Method:
 //    - Handles HTTP POST requests for patient login.
-//    - Accepts a `Login` DTO containing email/username and password.
+//    - Accepts a `Login` DTO containing email/userName and password.
 //    - Delegates authentication to the `validatePatientLogin` method in the shared service.
 //    - Returns a response with a token or an error message depending on login success.
 

@@ -13,15 +13,15 @@ public interface AppointmentRepository  extends JpaRepository<Appointment,Long> 
 
     @Query("select a, d.id, dat from Doctor d left join Appointment a"
                     + " on a.doctor.id = d.id left join DoctorAvailableTimes dat on d.id = dat.doctor.id"
-                     +   " where  a.appointment_time > :start "
-                    + " and a.appointment_time < :end")
+                     +   " where  a.appointmentTime > :start "
+                    + " and a.appointmentTime < :end")
     public List<Appointment> findByDoctorIdAndAppointmentTimeBetween(Long doctorId,
                                                                      LocalDateTime start, LocalDateTime end);
 
 
     @Query("select d, p.name from Doctor d left join Appointment a on d.id = a.doctor.id "
                     +" left join Patient p on p.id = a.patient.id "
-                    + " where a.appointment_time > :start and a.appointment_time < :end "
+                    + " where a.appointmentTime > :start and a.appointmentTime < :end "
                     + " and d.id = :doctor_id and p.name like CONCAT('%', :patientName,'%' )"    )
     public List<Appointment>findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(Long doctorId,
                                                                     String patientName, LocalDateTime start, LocalDateTime end);
@@ -45,7 +45,7 @@ public interface AppointmentRepository  extends JpaRepository<Appointment,Long> 
     public List<Appointment> filterByDoctorNameAndPatientId(String doctorName, Long patientId);
 
 
-    @Query("select d.name, p.name, a.appointment_time, a.condition from Appointment a, Doctor d, Patient p "
+    @Query("select d.name, p.name, a.appointmentTime, a.condition from Appointment a, Doctor d, Patient p "
                     + "where d.id = a.id and a.patient.id = p.id and "
                     + "p.id = :patientId and a.status = :status and "
                     + "lower(d.name) LIKE LOWER(CONCAT('%', :doctorName, '%'))")
@@ -56,9 +56,9 @@ public interface AppointmentRepository  extends JpaRepository<Appointment,Long> 
             + " where a.id = :id")
     public List<Appointment> findAppointmentById(Appointment appointment);
 
-    @Modifying
-    @Transactional
-    public void updateStatus(int status, List<Patient> id);
+//    @Modifying
+//    @Transactional
+//    public void updateStatus(int status, List<Patient> id);
 
     @Query("select a from Appointment a "
             + " where a.condition = :condition")

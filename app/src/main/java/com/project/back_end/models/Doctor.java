@@ -58,8 +58,12 @@ public class Doctor {
     @Size(min = 3, max = 200)
     private String clinic_address;
 
-    @ElementCollection
-    private List<String> available_times;  //List of available time slots (Example: "09:00 -10:00")
+//   This is set up wrong, correct code to follow
+//    @ElementCollection
+//    private List<String> available_times;  //List of available time slots (Example: "09:00 -10:00")
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DoctorAvailableTimes> availableTimes;
 
     @OneToMany(mappedBy = "doctor")
     private Collection<Appointment> appointment;
@@ -127,12 +131,12 @@ public class Doctor {
         this.phone = phone;
     }
 
-    public List<String> getAvailableTimes() {
-        return available_times;
+    public List<DoctorAvailableTimes> getAvailableTimes() {
+        return availableTimes;
     }
 
-    public void setAvailableTimes(List<String> available_times) {
-        this.available_times = available_times;
+    public void setAvailableTimes(List<DoctorAvailableTimes> availableTimes) {
+        this.availableTimes = availableTimes;
     }
 
     public String getUserName() {

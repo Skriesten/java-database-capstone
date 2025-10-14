@@ -51,7 +51,7 @@ public class TokenService {
     }
 
     @DependsOn
-    public JwtBuilder generateToken(String userName) throws Exception {
+    public JwtBuilder generateToken(String username) throws Exception {
         Date issuedAt = new Date();
         // Set the expiration date for 7 days from now
         long expirationTimeMillis = issuedAt.getTime() + TimeUnit.DAYS.toDays(7);

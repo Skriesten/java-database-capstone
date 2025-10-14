@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.function.LongToDoubleFunction;
 
 @RestController
-@RequestMapping("/appointments/")
+@RequestMapping("/appointments")
 public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
@@ -71,7 +71,7 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.CREATED).body(map);
     }
 
-    @PostMapping("/{token}")
+    @PutMapping("/{token}")
     public ResponseEntity<Map<String, String>> updateAppointment(Appointment appointment, @PathVariable String token){
         Map<String,String> map = new HashMap<>();
         boolean isValid = utilityService.validateToken("patient", token).hasBody();
@@ -88,9 +88,9 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}/{token}")
-    public ResponseEntity<Map<String, String>> cancelAppointment(@PathVariable Long appointmentId, @PathVariable String token){
+    public ResponseEntity<Map<String, String>> cancelAppointment(@PathVariable Long id, @PathVariable String token){
         Appointment appointment = new Appointment();
-        appointment.setId(appointmentId);
+        appointment.setId(id);
         Map<String,String> map = new HashMap<>();
         boolean isValid = utilityService.validateToken("patient", token).hasBody();
         if(!isValid){

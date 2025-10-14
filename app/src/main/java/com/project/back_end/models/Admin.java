@@ -21,7 +21,7 @@ public class Admin {
         private String name;
 
         @NotNull(message = "Field must be populated.")
-        private String userName;
+        private String username;
 
         @NotNull(message = "Password must be filled in.")
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -39,9 +39,9 @@ public class Admin {
         private String date_hired;
 
         // Parameterized Constructor
-        public Admin(Long id, String userName, String password) {
+        public Admin(Long id, String username, String password) {
             this.id = id;
-            this.userName = userName;
+            this.username = username;
             this.password = password;
         }
 
@@ -58,11 +58,11 @@ public class Admin {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
