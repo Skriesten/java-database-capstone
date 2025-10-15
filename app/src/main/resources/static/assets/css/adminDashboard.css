@@ -31,7 +31,7 @@ html, body{
     flex-direction: column;
     text-align: center;
 
-    background-image:url("static/assets/images/defineRole/index.png");
+    background-image:url("../images/defineRole/index.png");
     background-repeat:no-repeat;
     background-position:center;
     background-attachment:fixed;

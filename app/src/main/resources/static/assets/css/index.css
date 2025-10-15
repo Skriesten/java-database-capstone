@@ -1,6 +1,6 @@
 /* this is the style sheet file for index.html  */
 /* reset all elements when loading page */
-  *{
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -58,7 +58,7 @@ body{
     flex-direction: column;
     text-align: center;
 
-    background-image: url('static/assets/images/defineRole/index.png'); /* Specify the image path */
+    background-image: url('../images/defineRole/index.png'); /* Specify the image path */
     background-size: cover; /* Resize to cover the entire container */
     background-position: center; /* Center the image in the container */
     background-attachment: fixed; /* Fix the background relative to the viewport */

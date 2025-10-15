@@ -10,11 +10,11 @@ function renderHeader() {
     if (window.location.pathname.endsWith("index.html")) {
         localStorage.removeItem("userRole");
             headerDiv.innerHTML =
-                            `<header class="header">
-                             <div class="logo-img">
-                               <img src="../../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
-                               <span class="logo-title">Hospital CMS</span>
-                             </div>
+            `<header class="header" id="header">
+                 <div class="logo-img">
+                   <img src="../../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+                   <span class="logo-title">Hospital CMS</span>
+                 </div>
             </header>`;
         //return;
 
@@ -23,13 +23,13 @@ function renderHeader() {
         const token = localStorage.getItem("token");
 
         // 5.**  Initialize Header Content  ****
-        let headerContent = `<header class="header">
-         <div class="logo-section">
-           <img src="../../assets/images/logo/logo.png" alt="Hospital CRM 
-                    Logo" class="logo-img">
-           <span class="logo-title">Hospital CMS</span>
-         </div>
-         <nav>`;
+        let headerContent = `
+         <header class="header" id="header">
+            <div class="logo-img">
+               <img src="../../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+               <span class="logo-title">Hospital CMS</span>
+             </div>
+         </header>`;
 
         //6. Handle Session Expiry or Invalid Login
         if ((role === "loggedPatient" || role === "admin" || role === "doctor") && !token) {
@@ -58,13 +58,11 @@ function renderHeader() {
         }
 
     headerDiv.innerHTML = headerContent;
-    attachHeaderButtonListeners();
+    //attachHeaderButtonListeners();
     document.getElementById("addDocBtn").addEventListener("click", (e) => {
         // add event here
     });
-
         const myButton = document.getElementById("myButton");
-
         myButton.addEventListener("click", (event) => { });
     }
 

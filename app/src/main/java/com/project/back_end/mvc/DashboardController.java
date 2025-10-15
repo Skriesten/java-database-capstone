@@ -1,11 +1,9 @@
 package com.project.back_end.mvc;
 
-import com.project.back_end.models.Admin;
 import com.project.back_end.services.TokenService;
+import com.project.back_end.services.UtilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -13,32 +11,35 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class DashboardController {
 
 @Autowired
-TokenService tokenService;
-Admin admin;
+    TokenService tokenService;
+@Autowired
+    UtilityService utilityService;
+//Admin admin;
 
-    public DashboardController(TokenService tokenService) {
+    public DashboardController(TokenService tokenService, UtilityService utilityService) {
         this.tokenService = tokenService;
+        this.utilityService = utilityService;
     }
 
     @GetMapping("/adminDashboard/{token}")
 public String adminDashboard(@PathVariable String token){
-        if(tokenService.validateToken(token, "admin")) {
-            return "admin/adminDashboard";
+      if(utilityService.validateToken("admin", token).hasBody()) {
+            return "admin/adminDashboard.html";
         } else{
-            return "Dashboard";
+            return "/index.html";
         }
 }
 
 @GetMapping("/doctorDashboard/{token}")
 public String doctorDashboard(@PathVariable String token){
-        if(tokenService.validateToken(token, "doctor")) {
-            return "doctor/doctorDashboard";
+        if(utilityService.validateToken("doctor", token).hasBody()) {
+            return "doctor/doctorDashboard.html";
         } else {
-            return "Dashboard";
+            return "/index.html";
         }
     }
 
-   /*  ****  INSTRUCTIONS  ********************************* 
+   /*  ****  INSTRUCTIONS  ******************************
  1. Set Up the MVC Controller Class:
     - Annotate the class with `@Controller` to indicate that it serves as an MVC controller returning view names (not JSON).
     - This class handles routing to admin and doctor dashboard pages based on token validation.
