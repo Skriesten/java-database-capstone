@@ -1,28 +1,29 @@
 // patientDashboard.js
-import { getDoctors } from './services/doctorServices.js';
+import { getDoctors, filterDoctors } from './services/doctorServices.js';
 import { openModal } from './components/modals.js';
 import { createDoctorCard } from './components/doctorCard.js';
-import { filterDoctors } from './services/doctorServices.js';//call the same function to avoid duplication coz the functionality was same
 import { patientSignup, patientLogin } from './services/patientServices.js';
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadDoctorCards();
-});
+    // Load the doctor cards on page load.
+    document.addEventListener("DOMContentLoaded", () => {
+      loadDoctorCards();
+    });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("patientSignup");
-  if (btn) {
-    btn.addEventListener("click", () => openModal("patientSignup"));
-  }
-});
+    // Open patient signup modal
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("patientSignup");
+      if (btn) {
+        btn.addEventListener("click", () => openModal("patientSignup"));
+      }
+    });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const loginBtn = document.getElementById("patientLogin")
-  if (loginBtn) {
-    loginBtn.addEventListener("click", () => {
-      openModal("patientLogin")
-    })
-  }
+    // Open Patient Login modal
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginBtn = document.getElementById("patientLogin")
+      if (loginBtn) {loginBtn.addEventListener("click", () => {
+          openModal("patientLogin")
+        })
+      }
 })
 
 function loadDoctorCards() {

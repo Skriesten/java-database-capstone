@@ -35,7 +35,7 @@ public interface AppointmentRepository  extends JpaRepository<Appointment,Long> 
     public List<Appointment> findByPatientId(Long doctorId);
 
 
-    public List<Appointment> findByPatient_IdAndStatusOrderByAppointmentTimeAsc(Long patientId, int status);
+    public List<Appointment> findByPatient_IdAndStatusOrderByAppointmentTimeAsc(Long id, int status);
 
 
     @Query("SELECT a from Appointment a, Doctor d "

@@ -17,18 +17,18 @@ public class DashboardController {
 //Admin admin;
 
     public DashboardController(TokenService tokenService, UtilityService utilityService) {
-        this.tokenService = tokenService;
+       // this.tokenService = tokenService;
         this.utilityService = utilityService;
     }
 
     @GetMapping("/adminDashboard/{token}")
-public String adminDashboard(@PathVariable String token){
+    public String adminDashboard(@PathVariable String token){
       if(utilityService.validateToken("admin", token).hasBody()) {
             return "admin/adminDashboard.html";
         } else{
             return "/index.html";
         }
-}
+    }
 
 @GetMapping("/doctorDashboard/{token}")
 public String doctorDashboard(@PathVariable String token){

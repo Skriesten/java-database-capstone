@@ -71,8 +71,6 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private Collection<Patient_Record>  patientRecords;
 
-
-
     //  *********  GETTERS AND SETTERS  ********************
 
     public Collection<Appointment> getAppointment() {
@@ -186,7 +184,6 @@ public class Doctor {
     public void setClinic_address(String clinic_address) {
         this.clinic_address = clinic_address;
     }
-
 
     public Collection<Patient_Record> getPatientRecords() {
         return patientRecords;
