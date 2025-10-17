@@ -4,9 +4,9 @@
 // • The openModal function from the modal component file ../components/modals.js.
 //     The API_BASE_URL constant from your configuration file ../config/config.js.
 
-import {openModal} from "../components/modals";
+import {openModal} from "../components/modals.js";
 import {API_BASE_URL} from "../config/config.js";
-import {BASE_URL}  from "../config/config.js";
+//import {BASE_URL}  from "../config/config.js";
 
 // define two constants:
     const ADMIN_API = API_BASE_URL + '/admin';

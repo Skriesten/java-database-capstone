@@ -65,8 +65,6 @@ body{
     background-repeat: no-repeat; /* Prevent the image from repeating */
 }
 
-.header{
-}
 .footer{
     display: flex;
     flex-wrap: wrap;

@@ -1,8 +1,8 @@
 //  ******  This is the HEADER script page for all pages. ***************
 
 //1. Define the `renderHeader` Function
-import {openModal} from "./modals";
-import {patientSignup, patientLogin} from '../services/patientServices.js';
+//import {openModal} from "./modals";
+//import {patientSignup, patientLogin} from '../services/patientServices.js';
 
 function renderHeader() {
 
@@ -10,18 +10,18 @@ function renderHeader() {
     const headerDiv = document.getElementById("header");
 
     //3. Check if the Current Page is the Root Page
-    if (window.location.pathname.endsWith("/")) {
+    if (window.location.pathname.endsWith("")) {
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");
         headerDiv.innerHTML =
             `<header class="header" id="header">
                <div class="logo-img">
                  <img src="../../assets/images/logo/logo.png"
-                     alt="Hospital CRM Logo" class="logo-img">
-                   <span class="logo-title">Hospital CMS</span>
-                 </div>
+                     alt="Hospital CRM Logo" class="logo-img">                  
+                     <span class="logo-title">Hospital CMS</span>
+                </div>             
             </header>`;
-        return; // added text
+       // return; // added text
     }
 
     //4. Retrieve the User's Role and Token from LocalStorage}
@@ -61,12 +61,13 @@ function renderHeader() {
 
     headerDiv.innerHTML =
         `<header class="header" id="header">
-        <div class="logo-img">
-           <img src="../../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
-           <span class="logo-title">Hospital CMS</span>
-         </div>
-         ${dynamicContent}`
-        < /header>`;
+            <div class="logo-img">
+             <img src="../../assets/images/logo/logo.png"
+                 alt="Hospital CRM Logo" class="logo-img">                  
+             <span class="logo-title">Hospital CMS</span>               
+            </div>
+          ${dynamicContent}            
+        </header>`;
 
     attachHeaderButtonListeners();
 
@@ -152,6 +153,7 @@ function renderHeader() {
 }
 // Run the renderHeader function
 document.addEventListener("DOMContentLoaded", renderHeader);
+
 /*
   Step-by-Step Explanation of Header Section Rendering
   This code dynamically renders the header section of the page based on
