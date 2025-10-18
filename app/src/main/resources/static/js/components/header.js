@@ -1,8 +1,10 @@
 //  ******  This is the HEADER script page for all pages. ***************
 
 //1. Define the `renderHeader` Function
-//import {openModal} from "./modals";
-//import {patientSignup, patientLogin} from '../services/patientServices.js';
+import {openModal} from "./modals.js";
+import {patientSignup, patientLogin} from '../services/patientServices.js';
+
+//import {patientSignup} from "../services/patientServices";
 
 function renderHeader() {
 
@@ -10,7 +12,7 @@ function renderHeader() {
     const headerDiv = document.getElementById("header");
 
     //3. Check if the Current Page is the Root Page
-    if (window.location.pathname.endsWith("")) {
+    if (window.location.pathname.endsWith("/")) {
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");
         headerDiv.innerHTML =
@@ -50,7 +52,7 @@ function renderHeader() {
             <a href="/" id="doctorHomeLink">Home</a>`;
     } else if (role === "patient") {
         dynamicContent += `
-            <a href="/loggedPatientDashboard" id="patientLoginLink" class="anchor-link">Login</a>
+            <a href="../../pages/loggedPatientDashboard.html" id="patientLoginLink" class="anchor-link">Login</a>
             <a href="/login" id="patientSignupLink">Sign Up</a>`;
     } else if (role === "loggedPatient") {
         dynamicContent += `

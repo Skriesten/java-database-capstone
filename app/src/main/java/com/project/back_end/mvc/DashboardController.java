@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class DashboardController {
 
 @Autowired
-    TokenService tokenService;
-@Autowired
     UtilityService utilityService;
-//Admin admin;
 
     public DashboardController(TokenService tokenService, UtilityService utilityService) {
        // this.tokenService = tokenService;
@@ -24,7 +21,7 @@ public class DashboardController {
     @GetMapping("/adminDashboard/{token}")
     public String adminDashboard(@PathVariable String token){
       if(utilityService.validateToken("admin", token).hasBody()) {
-            return "admin/adminDashboard.html";
+            return "admin/adminDashboard";
         } else{
             return "/index.html";
         }
@@ -33,7 +30,7 @@ public class DashboardController {
 @GetMapping("/doctorDashboard/{token}")
 public String doctorDashboard(@PathVariable String token){
         if(utilityService.validateToken("doctor", token).hasBody()) {
-            return "doctor/doctorDashboard.html";
+            return "doctor/doctorDashboard";
         } else {
             return "/index.html";
         }

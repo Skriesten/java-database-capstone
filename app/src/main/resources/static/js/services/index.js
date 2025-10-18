@@ -17,8 +17,8 @@ import {API_BASE_URL} from "../config/config.js";
 //     Attach click event listeners to these buttons.
 
     window.onload = function() {
-        const adminBtn = document.getElementById('adminLogin');
-        const doctorBtn = document.getElementById('login');
+        const adminBtn = document.getElementById('adminBtn');
+        const doctorBtn = document.getElementById('doctorBtn');
 
         if (adminBtn) {
             adminBtn.addEventListener('click', (e) => {
@@ -26,14 +26,14 @@ import {API_BASE_URL} from "../config/config.js";
             });
         }
         if (doctorBtn) {
-            doctorBtn.addEventListener('click', function () {
+            doctorBtn.addEventListener('click',  () => {
                 // Code to execute when Doctor button is clicked
-                openModal('login');
+                openModal('doctorLogin');
             });
         }
     }
 
-    async function adminLoginHandler() {
+export async function adminLoginHandler() {
         let username;
         let password;
         let role;
@@ -44,7 +44,6 @@ import {API_BASE_URL} from "../config/config.js";
                    headers: {'Content-Type': 'application/json'},
                    body: JSON.stringify(admin)
                });
-
            localStorage.setItem('role', JSON.stringify(role));
            selectRole(admin);
        }catch (error) {
@@ -53,23 +52,20 @@ import {API_BASE_URL} from "../config/config.js";
        }
     }
 
-const doctorLoginHandler = async () => {
+export async function doctorLoginHandler(){
     try {
         // 1. Read the email and password values from the input fields
         const email = document.querySelector('#doctor-email').value;
         const password = document.querySelector('#doctor-password').value;
-
         // 2. Create a doctor object with these values
         const doctor = { email, password };
-
         // 3. Send a POST request to the Doctor login endpoint
         const response =
-                await fetch('/api/doctor/login', {
+                await fetch(DOCTOR_API, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(doctor),
         });
-
         // Handle server responses
         if (response.ok) {
             // 4. On success: Store the received token in localStorage
@@ -85,7 +81,7 @@ const doctorLoginHandler = async () => {
             }
 
             // Optional: Redirect or update UI after successful login
-            window.location.href = '/doctor-dashboard.html';
+            window.location.href = '/doctorDashboard.html';
         } else {
             // 6. On failure: alert the user about invalid credentials
             const errorData = await response.json();
@@ -96,7 +92,7 @@ const doctorLoginHandler = async () => {
         console.error('An unexpected error occurred during doctor login:', error);
         alert('An error occurred during login. Please try again.');
     }
-};
+}
 
 // Expose the function globally, if necessary, by attaching it to the window object.
 // This allows the function to be called from a button's `onclick` event in index.html.

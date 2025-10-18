@@ -1,6 +1,7 @@
 package com.project.back_end.services;
 
 import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Patient;
 import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
@@ -55,7 +56,6 @@ public class AppointmentService {
         }
     }
 
-
     @Transactional
     public void cancelAppointment(Appointment appointment) {
         int result = appointment.getStatus();
@@ -65,32 +65,30 @@ public class AppointmentService {
     }
 
     //  getAppointments method
-    public Map<String, Object> getAppointments(String pname, LocalDate startDate, LocalDate endDate, String token) {
+    public Map<String, Object> getAppointments(String name, LocalDate startDate, LocalDate endDate, String token) {
         Map<String, Object> apptMap = new HashMap<>();
         Appointment appointment = new Appointment();
         Long doctorId = appointment.getDoctor().getId();
-        LocalDate sDate = startDate;
-        LocalDate eDate = endDate;
-        String patientName = pname;
+        String patientName = name;
         boolean tokenOk = tokenService.validateToken(String.valueOf(token), appointment.getDoctor().getRole());
-        if (!pname.isBlank() && tokenOk) {
-            return (Map<String, Object>) appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(doctorId, patientName, sDate.atStartOfDay(), eDate.atStartOfDay());
+        if (!name.isBlank() && tokenOk) {
+            return (Map<String, Object>) appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(doctorId, name,
+                  startDate.atStartOfDay(), endDate.atStartOfDay());
         }
         return apptMap;
     }
 
     //  changeStatus method
-//    @Transactional
-//    public void changeStatus(int status, Appointment appointment) {
-//        // change the number of the status to 0
-//        Long doctorId = appointment.getDoctor().getId();
-//        int result = appointment.getStatus();
-//        int newStatus = 0;
-//        List<Appointment> apptList = appointmentRepository.findByPatientId(doctorId);
-//        List<Patient> apptId = apptList.sd   .getFirst().getPatient().getPatient_id();
-//        appointmentRepository.updateStatus(result, apptId);  // Update the status
-//        appointmentRepository.save(appointment); // save appointment
-//    }
+    @Transactional
+    public void changeStatus(int status, Appointment appointment) {
+        // change the number of the status to 0
+        String doctorName = appointment.getDoctor().getName();
+        int result = appointment.getStatus();
+        int newStatus = 0;
+        List<Appointment> appointmentList = appointmentRepository.filterByDoctorNameAndPatientIdAndStatus(doctorName, appointment.getPatient().getId(), status);
+        appointmentList.getFirst().setStatus(newStatus);
+        appointmentRepository.save(appointment); // save appointment
+    }
 
 }  // END OF CLASS BRACKET
 

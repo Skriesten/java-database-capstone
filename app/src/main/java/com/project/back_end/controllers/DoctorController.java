@@ -57,7 +57,7 @@ public class DoctorController {
 
     }
 
-    @GetMapping
+    @GetMapping("/doctor/")
     public ResponseEntity<Map<String, Object>> getDoctor(){
         Map<String, Object> response = new HashMap<>();
         List<Doctor> doctors = doctorService.getDoctors();

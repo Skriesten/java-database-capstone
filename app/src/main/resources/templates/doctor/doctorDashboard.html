@@ -9,31 +9,30 @@
     <link rel="stylesheet" href="../../static/assets/css/doctorDashboard.css"/>
     <link rel="stylesheet" href="../../static/assets/css/style.css"/>
 <!--  Utility js files-->
-    <script src="../../static/js/render.js"></script>
-    <script src="../../static/js/util.js"></script>
+    <script defer th:src="@{../../static/js/render.js}"></script>
+    <script defer th:src="@{../../static/js/util.js}"></script>
 <!--    Components js files-->
-   <script src="../../static/js/components/header.js"></script>
-    <script src="../../static/js/components/footer.js"></script>
-    <script src="../../static/js/components/patientRows.js"></script>
+   <script defer th:src="@{../../static/js/components/header.js}"></script>
+    <script defer th:src="@{../../static/js/components/footer.js}"></script>
+    <script defer th:src="@{../../static/js/components/patientRows.js}"></script>
 <!--    Services and main logic js files-->
-    <script src="../../static/js/services/patientServices.js"></script>
-    <script src="../../static/js/doctorDashboard.js"></script>
+    <script defer th:src="@{../../static/js/services/patientServices.js}"></script>
+    <script  defer th:src="@{../../static/js/doctorDashboard.js}"></script>
 </head>
 
-<body>
-<div class="container">
-    <div class="wrapper">
-        <div id="header">
-            <main class="main-content">
-                <input type="text" id="searchBar" placeholder="Search Doctor"/>
-                <input type="button" class="button" id="todayButton" value="Today's Appointments" onclick="getAppointments();"/>
-                <input type="date" id="datepicker"/>
-                <table id="patientTable"></table>
-            </main>
+<body onload="renderContent()">
+    <div class="container">
+        <div class="wrapper">
+            <div id="header"></header>
+                <main class="main-content">
+                    <input type="text" id="searchBar" placeholder="Search Bar for custom output"/>
+                    <input type="button" class="button" id="todayButton" value="Today's Appointments" onclick="getAppointments();"/>
+                    <input type="date" id="datepicker"/>
+                    <table id="patientTable"></table>
+                </main>
+            <div id="footer"></div>
         </div>
-        <div id="footer"></div>
     </div>
-</div>
 </body>
 
 <!-- 
@@ -76,7 +75,8 @@ This file defines the Doctor Dashboard interface, allowing doctors to view and m
      - `doctorDashboard.js` – Contains dashboard logic for doctor functionality, loaded as a module.
 
 10. Close the Head and Begin the Body
-    * Begin the visible part of the webpage using `<body onload="renderContent()">`, which calls a JavaScript function after loading.
+    * Begin the visible part of the webpage using `<body onload="renderContent()">`,
+    which calls a JavaScript function after loading.
 
 11. Create the Main Container
     * Use `<div class="container">` to wrap all content and structure the page.
