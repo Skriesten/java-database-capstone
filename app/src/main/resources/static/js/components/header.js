@@ -44,7 +44,7 @@ function renderHeader() {
     //  7. Add Role-Specific Header Content
     if (role === "admin") {
         dynamicContent += `
-           <button id="addDocBtn" class="adminBtn" onclick="openModal('addDoctor')">Add Doctor</button>
+           <button id="addDocBtn" class="adminBtn" >Add Doctor</button>
            <a href="/" id="logoutLink">Logout</a>`;
     } else if (role === "doctor") {
         dynamicContent += `

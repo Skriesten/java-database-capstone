@@ -42,6 +42,7 @@ public String doctorDashboard(@PathVariable String token){
         if(utilityService.validateToken("doctor", token).hasBody()) {
             return "doctor/doctorDashboard.html";
         } else {
+            //return "doctor/doctorDashboard.html";
             return "/index.html";
         }
     }
