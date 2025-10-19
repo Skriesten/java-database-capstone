@@ -81,7 +81,7 @@ export async function doctorLoginHandler(){
             }
 
             // Optional: Redirect or update UI after successful login
-            window.location.href = '/doctorDashboard.html';
+            window.location.href = 'doctor/doctorDashboard.html';
         } else {
             // 6. On failure: alert the user about invalid credentials
             const errorData = await response.json();

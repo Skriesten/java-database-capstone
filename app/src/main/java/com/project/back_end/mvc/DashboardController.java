@@ -18,19 +18,29 @@ public class DashboardController {
         this.utilityService = utilityService;
     }
 
-    @GetMapping("/adminDashboard/{token}")
+    @GetMapping("/doctor/doctorDashboard.html")
+    public String doctorDashboard() {
+        return "doctor/doctorDashboard"; // templates/doctor/doctorDashboard.html
+    }
+
+    @GetMapping("/admin/adminDashboard.html")
+    public String adminDashboard() {
+        return "admin/adminDashboard.html"; // templates/admin/adminDashboard.html
+    }
+
+    @GetMapping("admin/adminDashboard.html/{token}")
     public String adminDashboard(@PathVariable String token){
       if(utilityService.validateToken("admin", token).hasBody()) {
-            return "admin/adminDashboard";
+            return "admin/adminDashboard.html";
         } else{
             return "/index.html";
         }
     }
 
-@GetMapping("/doctorDashboard/{token}")
+@GetMapping("doctor/doctorDashboard.html/{token}")
 public String doctorDashboard(@PathVariable String token){
         if(utilityService.validateToken("doctor", token).hasBody()) {
-            return "doctor/doctorDashboard";
+            return "doctor/doctorDashboard.html";
         } else {
             return "/index.html";
         }

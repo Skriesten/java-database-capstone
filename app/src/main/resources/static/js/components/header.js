@@ -20,7 +20,7 @@ function renderHeader() {
                <div class="logo-img">
                  <img src="../../assets/images/logo/logo.png"
                      alt="Hospital CRM Logo" class="logo-img">                  
-                     <span class="logo-title">Hospital CMS</span>
+                     <span class="logo-title">Smart Clinic Management System</span>
                 </div>             
             </header>`;
        // return; // added text
@@ -66,7 +66,7 @@ function renderHeader() {
             <div class="logo-img">
              <img src="../../assets/images/logo/logo.png"
                  alt="Hospital CRM Logo" class="logo-img">                  
-             <span class="logo-title">Hospital CMS</span>               
+             <span class="logo-title">Smart Clinic Management System</span>               
             </div>
           ${dynamicContent}            
         </header>`;
