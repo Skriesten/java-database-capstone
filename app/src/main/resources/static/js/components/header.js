@@ -1,18 +1,22 @@
 //  ******  This is the HEADER script page for all pages. ***************
+// src/main/resources/static/js/components/header.js
+// Cleaned-up header renderer and safe handling when token is missing.
+//
+// Note: this file uses ES module imports. Include it in your Thymeleaf template with:
+// <script type="module" th:src="@{/js/components/header.js}" defer></script>
 
 //1. Define the `renderHeader` Function
 import {openModal} from "./modals.js";
 import {patientSignup, patientLogin} from '../services/patientServices.js';
 
 //import {patientSignup} from "../services/patientServices";
+window.myheader - window.myheader || {};
 
-function renderHeader() {
-
+export function renderHeader() {
     //2.  Select the Header Div, assign to variable headerDiv.
     const headerDiv = document.getElementById("header");
-
     //3. Check if the Current Page is the Root Page
-    if (window.location.pathname.endsWith("/")) {
+    if (window.location.pathname === ("/") || window.location.pathname.endsWith("/index.html")) {
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");
         headerDiv.innerHTML =
@@ -23,62 +27,86 @@ function renderHeader() {
                      <span class="logo-title">Smart Clinic Management System</span>
                 </div>             
             </header>`;
-       // return; // added text
+        return;
     }
 
     //4. Retrieve the User's Role and Token from LocalStorage}
     const role = localStorage.getItem("userRole");
     const token = localStorage.getItem("token");
 
-    // 5.**  Initialize Header Content  ****
-    let dynamicContent = '';
-
-    //6. Handle Session Expiry or Invalid Login
+    // If role exists but token is missing, *do not* immediately redirect.
+    // Instead clear the role and render a header with login/signup links so the user can sign in.
     if ((role === "loggedPatient" || role === "admin" || role === "doctor") && !token) {
         localStorage.removeItem("userRole");
-        alert("Session expired or invalid login. Please log in again.");
-        window.location.href = "/index.html";      //  or a specific login page
+        const fallbackContent = `
+        <header class="header" id="header">
+        <div class="logo-img">
+          <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+          <span class="logo-title">Smart Clinic Management System</span>
+        </div>
+        <nav class="header-nav">
+          <a id="loginLink" href="/login">Log in</a>
+          <a id="signupLink" href="/signup">Sign up</a>
+        </nav>
+      </header>`;
+        headerDiv.innerHTML = fallbackContent;
+        attachHeaderButtonListeners();
         return;
     }
+
+    // Build dynamic header content for valid sessions or anonymous users
+    let dynamicContent = `
+    <header class="header" id="header">
+      <div class="logo-img">
+        <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+        <span class="logo-title">Smart Clinic Management System</span>
+      </div>`;
 
     //  7. Add Role-Specific Header Content
     if (role === "admin") {
         dynamicContent += `
-           <button id="addDocBtn" class="adminBtn" >Add Doctor</button>
-           <a href="/" id="logoutLink">Logout</a>`;
+            <nav class="header-nav">
+            <button id="addDocBtn" class="adminBtn" >Add Doctor</button>
+           <a href="#" id="logoutLink">Logout</a>`
+            < /nav>`;
     } else if (role === "doctor") {
         dynamicContent += `
+            <nav class="header-nav">
             <a href="/" id="logoutLink">Logout</a>
-            <a href="/" id="doctorHomeLink">Home</a>`;
+            <a href="/" id="doctorHomeLink">Home</a>
+            </nav>`;
     } else if (role === "patient") {
         dynamicContent += `
+            <nav class="header-nav">
             <a href="../../pages/loggedPatientDashboard.html" id="patientLoginLink" class="anchor-link">Login</a>
-            <a href="/login" id="patientSignupLink">Sign Up</a>`;
+            <a href="/login" id="patientSignupLink">Sign Up</a>
+            </nav>`;
     } else if (role === "loggedPatient") {
         dynamicContent += `
+            <nav class="header-nav">
             <a href = "/" id="patientHomeLink" onclick="home()" > Home </a>
             <a href="/" id="appointmentsLink">Appointments</a>
-            <a href="/" id="patientLogoutLink">Logout</a>`;
+            <a href="/" id="patientLogoutLink">Logout</a>
+            </nav>`;
+    } else {
+        dynamicContent += `
+        <nav class="header-nav">
+            <a href="/login" id="loginLink">Logv in</a>
+            <a href="/signup" id="signupLink">Sign up</a>        
+        </nav>`;
     }
 
-    headerDiv.innerHTML =
-        `<header class="header" id="header">
-            <div class="logo-img">
-             <img src="../../assets/images/logo/logo.png"
-                 alt="Hospital CRM Logo" class="logo-img">                  
-             <span class="logo-title">Smart Clinic Management System</span>               
-            </div>
-          ${dynamicContent}            
-        </header>`;
+    dynamicContent += `</header>`;
+    headerDiv.innerHTML = dynamicContent;
 
     attachHeaderButtonListeners();
-
+}
     // 8.  Create method for button/link listeners
     function attachHeaderButtonListeners() {
         // Example for the 'Add Doctor' button
-        const addDoctorBtn = document.getElementById("addDoctorBtn");
-        if (addDoctorBtn) {
-            addDoctorBtn.addEventListener("click", () => {
+        const addDocBtn = document.getElementById("addDoctorBtn");
+        if (addDocBtn) {
+            addDocBtn.addEventListener("click", () => {
                 openModal('addDoctor');
             });
         }
@@ -90,9 +118,9 @@ function renderHeader() {
                 logout();
             });
 
-            const logoutLink = document.getElementById("logoutLink");
-            if (logoutLink) {
-                logoutLink.addEventListener("click", () => {
+            const loginLink = document.getElementById("logoutLink");
+            if (loginLink) {
+                loginLink.addEventListener("click", () => {
                     event.preventDefault();
                     logout();
                 })
@@ -127,35 +155,40 @@ function renderHeader() {
                     home();
                 });
             }
+            // Expose a small API if other code needs it
+            window.myHeader = window.myHeader || {};
+            window.myHeader.logout = logout;
+            window.myHeader.home = home;
         } // end of attachHeaderButtonListeners function
 
     }  // **********  End of  renderHeader function  **********************
 
-
-
     function logout() {
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");
-        window.location.href = "/index";
+        window.location.href = "/index.html";
     }
 
     function logoutPatient() {
         localStorage.removeItem("token");
         localStorage.setItem("userRole", "patient");
-        window.location.href = "/patientDashboard";
+        window.location.href = "/pages/patientDashboard.html";
     }
 
     function home() {
-        window.location.href = "/index";
+        window.location.href = "/index.html";
     }
 
     function appointments() {
-        window.location.href = "/patientAppointments";
+        window.location.href = "/pages/patientAppointments.html";
     }
-}
-// Run the renderHeader function
-document.addEventListener("DOMContentLoaded", renderHeader);
 
+// Run the renderHeader function
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderHeader);
+} else {
+    renderHeader();
+}
 /*
   Step-by-Step Explanation of Header Section Rendering
   This code dynamically renders the header section of the page based on
