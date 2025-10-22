@@ -67,8 +67,8 @@ export function renderHeader() {
         dynamicContent += `
             <nav class="header-nav">
             <button id="addDocBtn" class="adminBtn" >Add Doctor</button>
-           <a href="#" id="logoutLink">Logout</a>`
-            < /nav>`;
+           <a href="#" id="logoutLink">Logout</a>
+            </nav>`;
     } else if (role === "doctor") {
         dynamicContent += `
             <nav class="header-nav">
@@ -78,7 +78,7 @@ export function renderHeader() {
     } else if (role === "patient") {
         dynamicContent += `
             <nav class="header-nav">
-            <a href="../../pages/loggedPatientDashboard.html" id="patientLoginLink" class="anchor-link">Login</a>
+            <a href="/pages/loggedPatientDashboard.html" id="patientLoginLink" class="anchor-link">Login</a>
             <a href="/login" id="patientSignupLink">Sign Up</a>
             </nav>`;
     } else if (role === "loggedPatient") {
@@ -91,7 +91,7 @@ export function renderHeader() {
     } else {
         dynamicContent += `
         <nav class="header-nav">
-            <a href="/login" id="loginLink">Logv in</a>
+            <a href="/login" id="loginLink">Log in</a>
             <a href="/signup" id="signupLink">Sign up</a>        
         </nav>`;
     }
@@ -118,7 +118,7 @@ export function renderHeader() {
                 logout();
             });
 
-            const loginLink = document.getElementById("logoutLink");
+            const loginLink = document.getElementById("loginLink");
             if (loginLink) {
                 loginLink.addEventListener("click", () => {
                     event.preventDefault();

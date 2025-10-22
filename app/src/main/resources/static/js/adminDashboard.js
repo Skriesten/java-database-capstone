@@ -1,4 +1,4 @@
-import {openModal} from "./components/modals";
+import {openModal} from "./components/modals.js";
 import {getDoctors} from "./services/doctorServices.js";
 import {createDoctorCard} from "./components/doctorCard";
 import {filterDoctors} from "./services/doctorServices.js";

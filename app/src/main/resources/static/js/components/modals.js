@@ -38,36 +38,44 @@ export function openModal(type) {
       `;
   } else if (type === 'patientLogin') {
     modalContent = `
-        <h2>Patient Login</h2>
-        <input type="text" id="email" placeholder="Email" class="input-field">
-        <input type="password" id="password" placeholder="Password" class="input-field">
-        <button class="dashboard-btn" id="loginBtn">Login</button>
+        <div class="loginDiv">
+            <h2 class="loginTitle">Patient Login</h2>
+            <input type="text" id="email" placeholder="Email" class="input-field">
+            <input type="password" id="password" placeholder="Password" class="input-field">
+            <button class="dashboard-btn" id="loginBtn">Login</button>
+        </div>
       `;
   }
   else if (type === "patientSignup") {
     modalContent = `
-      <h2>Patient Signup</h2>
-      <input type="text" id="name" placeholder="Name" class="input-field">
-      <input type="email" id="email" placeholder="Email" class="input-field">
-      <input type="password" id="password" placeholder="Password" class="input-field">
-      <input type="text" id="phone" placeholder="Phone" class="input-field">
-      <input type="text" id="address" placeholder="Address" class="input-field">
-      <button class="dashboard-btn" id="signupBtn">Signup</button>
+     <div class="loginDiv">
+          <h2 class="loginTitle">Patient Signup</h2>
+          <input type="text" id="name" placeholder="Name" class="input-field">
+          <input type="email" id="email" placeholder="Email" class="input-field">
+          <input type="password" id="password" placeholder="Password" class="input-field">
+          <input type="text" id="phone" placeholder="Phone" class="input-field">
+          <input type="text" id="address" placeholder="Address" class="input-field">
+          <button class="dashboard-btn" id="signupBtn">Signup</button>
+     </div>
     `;
 
   } else if (type === 'adminLogin') {
     modalContent = `
-        <h2>Admin Login</h2>
+        <div class="loginDiv">
+        <h2 class="loginTitle">Admin Login</h2>
         <input type="text" id="username" name="username" placeholder="Username" class="input-field">
         <input type="password" id="password" name="password" placeholder="Password" class="input-field">
         <button class="dashboard-btn" id="adminLoginBtn" >Login</button>
+        </div>
       `;
   } else if (type === 'doctorLogin') {
     modalContent = `
-        <h2>Doctor Login</h2>
+        <div class="loginDiv">
+        <h2 class="loginTitle">Doctor Login</h2>
         <input type="text" id="email" placeholder="Email" class="input-field">
         <input type="password" id="password" placeholder="Password" class="input-field">
         <button class="dashboard-btn" id="doctorLoginBtn" >Login</button>
+        </div>
       `;
   }
 

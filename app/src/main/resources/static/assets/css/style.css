@@ -167,17 +167,20 @@
     }
   }
   
-
+/*Main modal window*/
   .modal {
     display: none;
     position: fixed;
     z-index: 999;
     padding-top: 60px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
+    left: 10%;
+    top: 10%;
+    width: 80%;
+    height: 80%;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    align-items: center;
+      justify-content: center;
   }
   
   .modal-content {
@@ -185,12 +188,23 @@
     margin: auto;
     padding: 30px;
     border-radius: 10px;
-    width: 400px;
+    width: 100%;
     position: relative;
+    align-content: center;
   }
   
   .modal-content h2{
     font-size: 32px;
+      color: #07aca3;
+  }
+
+  .loginDiv{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
   }
 
   .close {
@@ -202,13 +216,18 @@
     font-weight: bold;
     cursor: pointer;
   }
-  
+
+.loginTitle{
+    color:lightseagreen;
+}
+
   .close:hover {
     color: black;
   }
 
   .dashboard-btn{
-    width: 100%;
+    min-width: 500px;
+
   }
 
   .input-field {
@@ -217,8 +236,8 @@
     font-size: 16px;
     margin-top: 10px;
     margin-bottom: 20px;
-    width: 100%;
-    appearance: none; /* Remove default OS styles */
+    min-width: 500px;
+    appearance: auto; /* Remove default OS styles */
     background-color: #fff;
     color: #333;
     cursor: pointer;

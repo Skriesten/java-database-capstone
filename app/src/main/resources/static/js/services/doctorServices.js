@@ -1,24 +1,24 @@
 
-import {API_BASE_URL} from "../config/config";
+import {API_BASE_URL} from "../config/config.js";
 const DOCTOR_API = API_BASE_URL + '/doctor';
 
 // *** GET DOCTOR FUNCTION ******************
-export async  function getDoctors(){
- try {
-     let username;
-     let password;
-     const doctors = {username, password};
-     await fetch(`${DOCTOR_API}`,
-         {
-             method: 'GET',
-             headers: {'Content-Type': 'application/json'},
-             body: JSON.stringify({doctors})
-         });
- } catch (error) {
-     console.log(error.message);
-     alert("Could not find doctor");
- }
-} // End of getDoctors function
+export async  function getDoctors() {
+    try {
+        let username;
+        let password;
+        const doctors = {username, password};
+        await fetch(`${DOCTOR_API}`,
+            {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({doctors})
+            });
+    } catch (error) {
+        console.log(error.message);
+        alert("Could not find doctor");
+    }
+}  // End of getDoctors function
 
 // ***  DELETE DOCTOR FUNCTION ****************
 export async function deleteDoctor(id, token) {
@@ -62,33 +62,34 @@ export async function saveDoctor(doctor, token) {
     }catch(error) {
         alert("Could not create Doctor");
     }
-} // End of saveDoctor function
+}   // End of saveDoctor function
 
 
 // *** FILTER DOCTORS FUNCTION  *************************** //
 export async  function  filterDoctors(name, time, specialty) {
 
-        try {
-            const response = await fetch(`${DOCTOR_API}/filter/$(name)/$(time)/$(specialty)`, {
-                method: 'GET',
-                headers: {'Content-Type': 'application/json'},
-            });
+    try {
+        const response = await fetch(`${DOCTOR_API}/filter/$(name)/$(time)/$(specialty)`, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        });
 
-    // Return the list of doctors if response is OK
-    if (response.ok) {
-        const data = await response.json();
-        return data;
-    } else {
-        console.error("Failed to fetch doctors", response.statusText);
-        // Throw an error with the status code for specific handling
-        return [];
-    }
-}catch (error) {
-          console.error('Failed to filter doctors:', error);
-          // Return an empty list to prevent the application from crashing
+        // Return the list of doctors if response is OK
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            console.error("Failed to fetch doctors", response.statusText);
+            // Throw an error with the status code for specific handling
+            return [];
+        }
+    } catch (error) {
+        console.error('Failed to filter doctors:', error);
+        // Return an empty list to prevent the application from crashing
         return [];
     }
 }  // End of filterDoctors function
+
 /* **********  INSTRUCTIONS  ****************************** //
   Import the base API URL from the config file
   Define a constant DOCTOR_API to hold the full endpoint for doctor-related actions

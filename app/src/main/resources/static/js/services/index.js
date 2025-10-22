@@ -81,7 +81,7 @@ export async function doctorLoginHandler(){
             }
 
             // Optional: Redirect or update UI after successful login
-            window.location.href = 'doctor/doctorDashboard.html';
+            window.location.href = '/doctor/doctorDashboard.html';
         } else {
             // 6. On failure: alert the user about invalid credentials
             const errorData = await response.json();
@@ -97,10 +97,6 @@ export async function doctorLoginHandler(){
 // Expose the function globally, if necessary, by attaching it to the window object.
 // This allows the function to be called from a button's `onclick` event in index.html.
 window.doctorLoginHandler = doctorLoginHandler;
-
-
-
-
 
 /*
   Import the openModal function to handle showing login popups/modals

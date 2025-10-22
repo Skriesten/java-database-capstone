@@ -1,4 +1,12 @@
 // render.js
+import {getRole} from "./util.js";
+
+window.addEventListener('load', () => {
+    const role =  getRole();
+    if (!role) {
+        window.location.href = "/"; // if no role, send to role selection page
+    }
+});
 
 function selectRole(role) {
   setRole(role);
@@ -18,11 +26,10 @@ function selectRole(role) {
   }
 }
 
-
-function renderContent() {
-  const role = getRole();
-  if (!role) {
-    window.location.href = "/"; // if no role, send to role selection page
-    return;
-  }
-}
+// export function renderContent() {
+//   const role =  getRole();
+//   if (!role) {
+//     window.location.href = "/"; // if no role, send to role selection page
+//     return;
+//   }
+// }

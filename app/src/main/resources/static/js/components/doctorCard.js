@@ -1,10 +1,8 @@
 
 // Import overlay function
 import {showBookingOverlay} from '../loggedPatient.js';
-
 // Import deleteDoctor function
 import {deleteDoctor} from '../services/doctorServices.js';
-
 // Import fetch patent details function
 import {getPatientData} from "../services/patientServices.js";
 
@@ -104,7 +102,7 @@ export function createDoctorCard(doctor) {
 // Logged-in Patient
 // Assuming user is logged in as a 'patient'
 localStorage.setItem('userRole', 'patient');
-const newDoctorCard = createDoctorCard(doctorData);
+const newDoctorCard = createDoctorCard();
 
 // Append the card to a container in your HTML, e.g., a div with id="doctor-list"
 document.getElementById('doctor-list').appendChild(newDoctorCard);

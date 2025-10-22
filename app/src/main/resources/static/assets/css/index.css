@@ -43,11 +43,15 @@ body{
 }
 
 .dashboard-btn{
+    color:white;
+    font-size: 14pt;
     font-family: 'Roboto', sans-serif;
+    font-weight: bold;
     background-color: #015c5d;
 }
 .dashboard-btn:hover{
     background-color: #003e3e;
+    color:gray;
 }
 .main-content{
     flex-grow: 1;

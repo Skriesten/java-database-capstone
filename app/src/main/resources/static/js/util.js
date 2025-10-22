@@ -3,7 +3,7 @@
     localStorage.setItem("userRole", role);
   }
   
-  function getRole() {
+ export function getRole() {
     return localStorage.getItem("userRole");
   }
   

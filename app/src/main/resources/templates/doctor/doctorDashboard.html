@@ -1,45 +1,86 @@
-<!-- doctorDashboard.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
     <title>Doctor Dashboard</title>
-<!--    <link rel="icon" type="image/png" th:href="@{../../static/assets/images/logo/logo.png}" />-->
-<!--    <link rel="stylesheet" href="../../static/assets/css/adminDashboard.css"/>-->
-<!--    <link rel="stylesheet" href="../../static/assets/css/doctorDashboard.css"/>-->
-<!--    <link rel="stylesheet" href="../../static/assets/css/style.css"/>-->
 
     <link rel="icon" type="image/png" th:href="@{/assets/images/logo/logo.png}" />
     <link rel="stylesheet" th:href="@{/assets/css/adminDashboard.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/doctorDashboard.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
-<!--  Utility js files-->
+
+    <!-- Utility js files (non-module) -->
     <script defer th:src="@{/js/render.js}"></script>
     <script defer th:src="@{/js/util.js}"></script>
-<!--    Components js files-->
+
+    <!-- Components - header MUST be loaded as a module because it uses imports -->
     <script type="module" defer th:src="@{/js/components/header.js}"></script>
-<!--   <script defer th:src="@{/js/components/header.js}"></script>  modified by AI-->
     <script defer th:src="@{/js/components/footer.js}"></script>
     <script defer th:src="@{/js/components/patientRows.js}"></script>
-<!--    Services and main logic js files-->
+
+    <!-- Page services and logic (doctorDashboard.js uses import, so load as module) -->
     <script defer th:src="@{/js/services/patientServices.js}"></script>
-    <script  defer th:src="@{/js/doctorDashboard.js}"></script>
+    <script type="module" defer th:src="@{/js/doctorDashboard.js}"></script>
 </head>
 
-<body onload="renderContent()">
-    <div class="container">
-        <div class="wrapper">
-            <div id="header"></header>
-                <main class="main-content">
-                    <input type="text" id="searchBar" placeholder="Search Bar for custom output"/>
-                    <input type="button" class="button" id="todayButton" value="Today's Appointments" onclick="getAppointments();"/>
-                    <input type="date" id="datepicker"/>
-                    <table id="patientTable"></table>
-                </main>
-            <div id="footer"></div>
-        </div>
+<body>
+<div class="container">
+    <div class="wrapper">
+        <!-- FIXED header placeholder -->
+        <div id="header"></div>
+
+        <main class="main-content">
+            <input type="text" id="searchBar" placeholder="Search Bar for custom output"/>
+            <input type="button" class="button" id="todayButton" value="Today's Appointments" onclick="getAppointments();"/>
+            <input type="date" id="datepicker"/>
+            <table id="patientTable"></table>
+        </main>
+
+        <div id="footer"></div>
     </div>
+</div>
 </body>
+</html>
+<!--  ======================   Original code  =======================-->
+<!-- doctorDashboard.html -->
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="en">-->
+<!--<head>-->
+<!--    <meta charset="utf-8">-->
+<!--    <title>Doctor Dashboard</title>-->
+<!--&lt;!&ndash;    <link rel="icon" type="image/png" th:href="@{../../static/assets/images/logo/logo.png}" />&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="stylesheet" href="../../static/assets/css/adminDashboard.css"/>&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="stylesheet" href="../../static/assets/css/doctorDashboard.css"/>&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="stylesheet" href="../../static/assets/css/style.css"/>&ndash;&gt;-->
+
+<!--    <link rel="icon" type="image/png" th:href="@{/assets/images/logo/logo.png}" />-->
+<!--    <link rel="stylesheet" th:href="@{/assets/css/adminDashboard.css}" />-->
+<!--    <link rel="stylesheet" th:href="@{/assets/css/doctorDashboard.css}" />-->
+<!--    <link rel="stylesheet" th:href="@{/assets/css/style.css}" />-->
+
+<!--    <script type="module" defer th:src="@{/js/components/header.js}"></script>-->
+<!--    <script type="module" defer th:src="@{/js/render.js}"></script>-->
+<!--    <script type="module" defer th:src="@{/js/util.js}"></script>-->
+<!--    <script type="module" defer th:src="@{/js/components/patientRows.js}"></script>-->
+<!--    <script type="module" defer th:src="@{/js/services/patientServices.js}"></script>-->
+<!--    <script type="module" defer th:src="@{/js/doctorDashboard.js}"></script>-->
+<!--    <script type="module" defer th:src="@{/js/components/footer.js}"></script>-->
+<!--</head>-->
+
+<!--<body onload="renderContent()">-->
+<!--    <div class="container">-->
+<!--        <div class="wrapper">-->
+<!--            <div id="header"></div>-->
+<!--            <main class="main-content">-->
+<!--                <input type="text" id="searchBar" placeholder="Search Bar for custom output"/>-->
+<!--                <input type="button" class="button" id="todayButton" value="Today's Appointments" onclick="getAppointments();"/>-->
+<!--                <input type="date" id="datepicker"/>-->
+<!--                <table id="patientTable"></table>-->
+<!--            </main>-->
+<!--            <div id="footer"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</body>-->
 
 <!-- 
 Step-by-Step Explanation of `doctorDashboard.html`
