@@ -1,7 +1,6 @@
 // appointmentRow.js
 export function getAppointments(appointment) {
   const tr = document.createElement("tr");
-
   tr.innerHTML = `
       <td class="patient-id">${appointment.patientName}</td>
       <td>${appointment.doctorName}</td>

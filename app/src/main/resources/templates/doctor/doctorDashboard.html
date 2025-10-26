@@ -15,12 +15,12 @@
 
     <!-- Components - header MUST be loaded as a module because it uses imports -->
     <script type="module" defer th:src="@{/js/components/header.js}"></script>
+    <script defer th:src="@{/js/services/patientServices.js}"></script>
+    <script type="module" defer th:src="@{/js/doctorDashboard.js}"></script>
+    <script type="module" defer th:src="@{/js/components/appointmentRow.js}"></script>
     <script defer th:src="@{/js/components/footer.js}"></script>
     <script defer th:src="@{/js/components/patientRows.js}"></script>
 
-    <!-- Page services and logic (doctorDashboard.js uses import, so load as module) -->
-    <script defer th:src="@{/js/services/patientServices.js}"></script>
-    <script type="module" defer th:src="@{/js/doctorDashboard.js}"></script>
 </head>
 
 <body>
@@ -30,12 +30,32 @@
         <div id="header"></div>
 
         <main class="main-content">
-            <input type="text" id="searchBar" placeholder="Search Bar for custom output"/>
-            <input type="button" class="button" id="todayButton" value="Today's Appointments" onclick="getAppointments();"/>
-            <input type="date" id="datepicker"/>
-            <table id="patientTable"></table>
+            <label for="searchBar">Patient Search:</label><input type="text" id="searchBar" class="searchBar" placeholder="Search Bar for custom output" />
+           <input type="button" class="button" id="todayButton" value="Today's Appointments" onclick="getAppointments()"/>
+                                                                        <!-- Not sure if this is the right function name: getAppointments()-->
+            <input type="date" id="datePicker"/>
+            <!--Table to list patients-->
+            <table id="patientTable">
+                <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Patient Name</th>
+                        <th>Phone No.</th>
+                        <th>Email</th>
+                        <th>Prescription</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="patient : ${patients}">
+                        <td th:text="${id}"></td>
+                        <td th:text="${name}"></td>
+                        <td th:text="${phone}"></td>
+                        <td th:text="${email}"></td>
+                        <td th:text="${prescription}"></td>
+                    </tr>
+                </tbody>
+            </table>
         </main>
-
         <div id="footer"></div>
     </div>
 </div>

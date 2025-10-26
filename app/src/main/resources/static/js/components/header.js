@@ -22,9 +22,10 @@ export function renderHeader() {
         headerDiv.innerHTML =
             `<header class="header" id="header">
                <div class="logo-img">
-                 <img src="../../assets/images/logo/logo.png"
-                     alt="Hospital CRM Logo" class="logo-img">                  
-                     <span class="logo-title">Smart Clinic Management System</span>
+                <a href="http://localhost:9090" target="_self">
+                    <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">          
+                </a>                 
+                <span class="logo-title">Smart Clinic Management System</span>
                 </div>             
             </header>`;
         return;
@@ -41,7 +42,9 @@ export function renderHeader() {
         const fallbackContent = `
         <header class="header" id="header">
         <div class="logo-img">
-          <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+         <a href="http://localhost:9090" target="_blank">
+          <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">          
+        </a>
           <span class="logo-title">Smart Clinic Management System</span>
         </div>
         <nav class="header-nav">
@@ -58,7 +61,9 @@ export function renderHeader() {
     let dynamicContent = `
     <header class="header" id="header">
       <div class="logo-img">
-        <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+       <a href="http://localhost:9090" target="_blank">
+          <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">          
+        </a>
         <span class="logo-title">Smart Clinic Management System</span>
       </div>`;
 
@@ -79,7 +84,7 @@ export function renderHeader() {
         dynamicContent += `
             <nav class="header-nav">
             <a href="/pages/loggedPatientDashboard.html" id="patientLoginLink" class="anchor-link">Login</a>
-            <a href="/login" id="patientSignupLink">Sign Up</a>
+            <a href="#" id="patientSignupLink" role="button" aria-haspopup="dialog">Sign Up</a>
             </nav>`;
     } else if (role === "loggedPatient") {
         dynamicContent += `
@@ -135,16 +140,17 @@ export function renderHeader() {
 
             const patientLoginLink = document.getElementById("patientLoginLink");
             if (patientLoginLink) {
-                patientLoginLink.addEventListener("click", () => {
-                    event.preventDefault();
-                    patientLogin().then();
+                patientLoginLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    openModal('patientLogin');
                 })
             }
 
             const patientSignupLink = document.getElementById("patientSignupLink");
             if (patientSignupLink) {
-                patientSignupLink.addEventListener("click", () => {
-                    patientSignup().then();
+                patientSignupLink.addEventListener("click", (e) => {
+                    e.preventDefault();                // stop <a> from navigating
+                    openModal('patientSignup');       // show your signup modal (implement below)
                 });
             }
 

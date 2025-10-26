@@ -6,7 +6,7 @@ import { patientSignup, patientLogin } from './services/patientServices.js';
 
     // Load the doctor cards on page load.
     document.addEventListener("DOMContentLoaded", () => {
-      loadDoctorCards();
+        loadDoctorCards();
     });
 
     // Open patient signup modal
@@ -26,6 +26,8 @@ import { patientSignup, patientLogin } from './services/patientServices.js';
       }
 })
 
+
+// ***** loadDoctorCards function  ***********************8
 function loadDoctorCards() {
   getDoctors()
     .then(doctors => {
@@ -40,24 +42,25 @@ function loadDoctorCards() {
     .catch(error => {
       console.error("Failed to load doctors:", error);
     });
-}
+} //  ****  end of loadDoctorCards function  *******************
+
 // Filter Input
 document.getElementById("searchBar").addEventListener("input", filterDoctorsOnChange);
 document.getElementById("filterTime").addEventListener("change", filterDoctorsOnChange);
 document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);
 
 
-
+// **** filterDoctorsOnChange function ****************
 function filterDoctorsOnChange() {
+  // ***** initialize constant variables  *******************
   const searchBar = document.getElementById("searchBar").value.trim();
   const filterTime = document.getElementById("filterTime").value;
   const filterSpecialty = document.getElementById("filterSpecialty").value;
-
-
   const name = searchBar.length > 0 ? searchBar : null;
   const time = filterTime.length > 0 ? filterTime : null;
   const specialty = filterSpecialty.length > 0 ? filterSpecialty : null;
 
+  //  *** calling the filterDoctors function from doctorServices.js
   filterDoctors(name, time, specialty)
     .then(response => {
       const doctors = response.doctors;
@@ -79,8 +82,9 @@ function filterDoctorsOnChange() {
       console.error("Failed to filter doctors:", error);
       alert("❌ An error occurred while filtering doctors.");
     });
-}
+}  //  *** end of filterDoctors call  ******************8
 
+//  ****  signupPatient function  *********************
 window.signupPatient = async function () {
   try {
     const name = document.getElementById("name").value;
@@ -101,8 +105,9 @@ window.signupPatient = async function () {
     console.error("Signup failed:", error);
     alert("❌ An error occurred while signing up.");
   }
-};
+};  //  **  end  of signupPatient function  ***********************
 
+//  ***  loginPatient function  **********************
 window.loginPatient = async function () {
   try {
     const email = document.getElementById("email").value;
@@ -130,6 +135,4 @@ window.loginPatient = async function () {
     alert("❌ Failed to Login : ", error);
     console.log("Error :: loginPatient :: ", error)
   }
-
-
-}
+}  //  ***  end of loginPatient function  *********************

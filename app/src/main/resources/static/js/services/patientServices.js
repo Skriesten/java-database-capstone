@@ -5,7 +5,10 @@ const PATIENT_API = API_BASE_URL + '/patient'
 
 //For creating a patient in db
 export async function patientSignup(data) {
-  try {
+    if (!data || !data.email || !data.password || !data.name) {
+        return { success: false, message: 'Missing required signup fields' };
+    }
+    try {
     const response = await fetch(`${PATIENT_API}`,
       {
         method: "POST",
