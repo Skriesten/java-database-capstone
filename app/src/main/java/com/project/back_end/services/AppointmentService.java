@@ -81,13 +81,7 @@ public class AppointmentService {
     //  changeStatus method
     @Transactional
     public void changeStatus(int status, Appointment appointment) {
-        // change the number of the status to 0
-        String doctorName = appointment.getDoctor().getName();
-        int result = appointment.getStatus();
-        int newStatus = 0;
-        List<Appointment> appointmentList = appointmentRepository.filterByDoctorNameAndPatientIdAndStatus(doctorName, appointment.getPatient().getId(), status);
-        appointmentList.getFirst().setStatus(newStatus);
-        appointmentRepository.save(appointment); // save appointment
+        appointment.setStatus(status);
     }
 
 }  // END OF CLASS BRACKET
